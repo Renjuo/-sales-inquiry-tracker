@@ -1,0 +1,213 @@
+/* Halaman login: dua kolom di desktop, satu kolom di HP */
+:root {
+	/* Selalu tema terang: cegah browser HP (Auto Dark) menggelapkan halaman */
+	color-scheme: only light;
+	--brand-600: #1e5bd6;
+	--brand-700: #1746b8;
+	--text-strong: #0f172a;
+	--text: #334155;
+	--text-muted: #64748b;
+	--border: #dbe1ea;
+	--danger-bg: #fee2e2;
+	--danger-fg: #b91c1c;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px 16px;
+	font: 400 15px/1.5 "Inter", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+	color: var(--text);
+	background: #f5f7fb;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* Background gambar dibuat buram; inset negatif agar tepi blur tidak terlihat */
+body::before {
+	content: "";
+	position: fixed;
+	inset: -24px;
+	z-index: -1;
+	background: url("../../images/bg-login.png") center / cover no-repeat;
+	filter: blur(8px) brightness(.9);
+	animation: bg-pan 30s ease-in-out infinite alternate;
+}
+
+/* Latar bergerak pelan (zoom + geser) */
+@keyframes bg-pan {
+	from { transform: scale(1) translate(0, 0); }
+	to   { transform: scale(1.08) translate(-2%, 1%); }
+}
+
+.login-wrap {
+	width: 100%;
+	max-width: 960px;
+	display: grid;
+	grid-template-columns: 1.1fr 1fr;
+	background: #fff;
+	border-radius: 24px;
+	overflow: hidden;
+	box-shadow: 0 1px 3px rgba(15, 23, 42, .06), 0 24px 60px rgba(15, 23, 42, .12);
+}
+
+/* Panel kiri */
+.login-brand {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	gap: 12px;
+	padding: 48px;
+	color: #fff;
+	background: linear-gradient(145deg, #1e5bd6 0%, #0f2f7a 50%, #1e5bd6 100%);
+	background-size: 200% 200%;
+	animation: brand-shift 12s ease-in-out infinite alternate;
+	position: relative;
+}
+
+@keyframes brand-shift {
+	from { background-position: 0% 0%; }
+	to   { background-position: 100% 100%; }
+}
+
+.login-logo {
+	position: absolute;
+	top: 40px;
+	left: 48px;
+	max-width: 170px;
+	background: #fff;
+	padding: 10px 14px;
+	border-radius: 12px;
+}
+
+.login-brand h1 { margin: 0; font-size: 30px; line-height: 1.2; font-weight: 700; }
+.login-brand p { margin: 0; color: rgba(255, 255, 255, .8); max-width: 34ch; }
+
+/* Panel kanan */
+.login-card { padding: 48px 44px; }
+
+.login-card > input[type=radio] { display: none; }
+
+/* Hanya satu tab ("Masuk") -> tampil sebagai judul, bukan tombol */
+.tabs {
+	margin-bottom: 24px;
+}
+
+.tab {
+	display: block;
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: var(--text-strong);
+	cursor: default;
+}
+
+.sign-in-htm, .sign-up-htm { display: none; }
+.sign-in:checked ~ .sign-in-htm,
+.sign-up:checked ~ .sign-up-htm { display: block; animation: fade .25s ease; }
+
+@keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+.group { margin-bottom: 18px; }
+
+.label {
+	display: block;
+	margin-bottom: 6px;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--text);
+}
+
+.input {
+	width: 100%;
+	height: 46px;
+	padding: 0 14px;
+	font: inherit;
+	color: var(--text-strong);
+	background: #fff;
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.input:focus {
+	outline: 0;
+	border-color: var(--brand-600);
+	box-shadow: 0 0 0 4px rgba(30, 91, 214, .15);
+}
+
+.check {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 4px 0 22px;
+	font-size: 14px;
+	color: var(--text-muted);
+	cursor: pointer;
+}
+
+.check input { width: 16px; height: 16px; accent-color: var(--brand-600); }
+
+.button {
+	width: 100%;
+	height: 48px;
+	font: inherit;
+	font-weight: 600;
+	color: #fff;
+	background: var(--brand-600);
+	border: 0;
+	border-radius: 12px;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	transition: background-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+/* Kilau tipis yang lewat saat hover */
+.button::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, .25) 50%, transparent 70%);
+	transform: translateX(-100%);
+	transition: transform .6s ease;
+}
+
+.button:hover {
+	background: var(--brand-700);
+	transform: translateY(-1px);
+	box-shadow: 0 6px 16px rgba(30, 91, 214, .3);
+}
+.button:hover::after { transform: translateX(100%); }
+.button:active { transform: translateY(0); box-shadow: none; }
+
+@media (prefers-reduced-motion: reduce) {
+	.button, .button::after { transition: none; }
+	body::before, .login-brand { animation: none; }
+}
+
+.alert {
+	margin-bottom: 18px;
+	padding: 12px 14px;
+	font-size: 14px;
+	color: var(--danger-fg);
+	background: var(--danger-bg);
+	border-radius: 12px;
+}
+
+.foot-lnk { margin: 20px 0 0; text-align: center; font-size: 14px; color: var(--text-muted); }
+.foot-lnk label { color: var(--brand-600); font-weight: 600; cursor: pointer; }
+
+/* Tablet & HP */
+@media (max-width: 767.98px) {
+	body { align-items: flex-start; padding: 16px; }
+	.login-wrap { grid-template-columns: 1fr; border-radius: 20px; }
+	.login-brand { padding: 28px 24px; gap: 6px; }
+	.login-logo { position: static; max-width: 140px; margin-bottom: 14px; }
+	.login-brand h1 { font-size: 22px; }
+	.login-brand p { font-size: 14px; }
+	.login-card { padding: 28px 24px 32px; }
+}

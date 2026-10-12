@@ -1,0 +1,39 @@
+# Rahasia & konfigurasi per-server (lihat .env.example)
+.env
+.env.*
+!.env.example
+
+# Data bisnis & cadangan: jangan masuk repo
+*.xlsx
+*.xls
+*.csv
+~$*
+*.bak
+*.zip
+*.rar
+*.7z
+# Dump database (berisi data pelanggan & hash password). Skema tabel baru tetap ikut:
+*.sql
+!application/trequest_customer.sql
+!application/tdetail_kategori.sql
+
+# File yang dibuat saat aplikasi berjalan
+application/logs/*
+!application/logs/index.html
+!application/logs/.htaccess
+application/cache/*
+!application/cache/index.html
+!application/cache/.htaccess
+
+# Perkakas lokal & hasil generate
+graphify-out/
+.claude/
+.rtk/
+.idea/
+.vscode/
+Thumbs.db
+.DS_Store
+.agents/
+AGENTS.md
+CLAUDE.md
+.graphifyignore

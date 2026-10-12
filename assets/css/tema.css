@@ -1,0 +1,253 @@
+/* ==========================================================================
+   tema.css - dimuat setelah app.css
+   1. Latar beranimasi (aurora lembut) + cahaya yang mengikuti kursor
+   2. Tema gelap: html[data-theme="dark"] (tombol di header, pilihan disimpan di browser)
+   ========================================================================== */
+
+/* ---------- 1. Latar beranimasi ---------- */
+/* Lapisan A: dua cahaya biru yang bergeser pelan */
+body::before {
+    animation: aurora-a 26s ease-in-out infinite alternate;
+    background:
+        radial-gradient(32% 42% at 18% 58%, var(--aurora-1), transparent 70%),
+        radial-gradient(36% 28% at 74% 16%, var(--aurora-2), transparent 70%);
+    inset: -25%;
+}
+/* Lapisan B: dua cahaya lain dengan arah & tempo berbeda, supaya gerakannya tidak terasa berulang */
+body::after {
+    animation: aurora-b 34s ease-in-out infinite alternate;
+    background:
+        radial-gradient(38% 30% at 58% 84%, var(--aurora-3), transparent 70%),
+        radial-gradient(26% 30% at 92% 62%, var(--aurora-4), transparent 70%);
+    content: "";
+    inset: -25%;
+    pointer-events: none;
+    position: fixed;
+    z-index: -1;
+}
+/* Cahaya halus di posisi kursor (main.js mengisi --mx / --my). Terlihat di sela-sela kartu & di balik header kaca. */
+html::before {
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 30%), var(--aurora-kursor), transparent 68%);
+    content: "";
+    inset: 0;
+    opacity: var(--glow, 0);
+    pointer-events: none;
+    position: fixed;
+    transition: opacity .8s ease;
+    z-index: -1;
+}
+:root {
+    --aurora-1: rgba(30, 91, 214, .26);
+    --aurora-2: rgba(14, 165, 233, .24);
+    --aurora-3: rgba(99, 102, 241, .18);
+    --aurora-4: rgba(56, 189, 248, .16);
+    --aurora-kursor: rgba(30, 91, 214, .16);
+}
+@keyframes aurora-a {
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+    50%  { transform: translate(-7%, 5%) scale(1.1) rotate(4deg); }
+    100% { transform: translate(6%, -5%) scale(1.02) rotate(-3deg); }
+}
+@keyframes aurora-b {
+    0%   { transform: translate(0, 0) scale(1.05); }
+    50%  { transform: translate(8%, -6%) scale(1); }
+    100% { transform: translate(-6%, 4%) scale(1.12); }
+}
+@media (prefers-reduced-motion: reduce) {
+    body::before, body::after { animation: none; }
+    html::before { display: none; }
+}
+
+/* ---------- Tombol ganti tema (header) ---------- */
+.tema-toggle { align-items: center; background: #fff; border: 1px solid #e3eaf6; border-radius: 12px; box-shadow: var(--shadow-sm); color: var(--text-muted); cursor: pointer; display: flex; font-size: 16px; height: 40px; justify-content: center; margin-right: 12px; padding: 0; transition: background-color .15s ease, border-color .15s ease, color .15s ease, transform .3s ease; width: 40px; }
+.tema-toggle:hover { background: var(--brand-soft); border-color: #c9dafc; color: var(--brand-600); }
+.tema-toggle:focus { outline: 0; }
+.tema-toggle:active { transform: rotate(40deg); }
+.tema-toggle .fa-sun-o { display: none; }
+html[data-theme="dark"] .tema-toggle .fa-sun-o { display: inline; }
+html[data-theme="dark"] .tema-toggle .fa-moon-o { display: none; }
+
+/* ---------- 2. Tema gelap ---------- */
+html[data-theme="dark"] {
+    color-scheme: dark;
+    --brand-600: #3b76f0;
+    --brand-700: #8ab0ff;
+    --brand-soft: #172746;
+    --accent-soft: #3a2413;
+    --bg-page: #0b1220;
+    --bg-surface: #111a2e;
+    --bg-elev: #152038;      /* dropdown, popup, isian */
+    --bg-inset: #0d1526;     /* isian form, kepala tabel */
+    --border: #22304a;
+    --text-strong: #f1f5f9;
+    --text: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-faint: #6b7a93;
+    --st-po-bg: #0f2e22;    --st-po-fg: #4ade80;
+    --st-quote-bg: #14274d; --st-quote-fg: #9dbcff;
+    --st-belum-bg: #3a2f0b; --st-belum-fg: #facc15;
+    --st-tunda-bg: #1e293b; --st-tunda-fg: #cbd5e1;
+    --st-close-bg: #3a1c2a; --st-close-fg: #f3a8c4;
+    --danger-bg: #3b1518;   --danger-fg: #fca5a5;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .4);
+    --shadow: 0 1px 3px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .35);
+    --loader-bg: #0b1220;
+    --loader-text: #94a3b8;
+    --aurora-1: rgba(37, 99, 235, .30);
+    --aurora-2: rgba(14, 116, 190, .26);
+    --aurora-3: rgba(99, 102, 241, .22);
+    --aurora-4: rgba(8, 145, 178, .18);
+    --aurora-kursor: rgba(96, 165, 250, .14);
+}
+
+/* Kerangka: header kaca & sidebar */
+html[data-theme="dark"] .right-panel header.header { background: rgba(11, 18, 32, .72); border-bottom-color: var(--border); }
+html[data-theme="dark"] aside.left-panel {
+    --sb-bg: rgba(13, 21, 38, .82);
+    --sb-text: #a8b3c7;
+    --sb-hover-bg: #18243f;
+    --sb-icon: #7f8ca6;
+}
+/* Logo lengkap bertulisan gelap: diberi alas putih supaya terbaca (logo ikon saat sidebar diciutkan tidak perlu) */
+html[data-theme="dark"] aside.left-panel .navbar-brand:not(.hidden) img { background: #fff; border-radius: 10px; padding: 4px 8px; }
+html[data-theme="dark"] .menutoggle, html[data-theme="dark"] .sidebar-close,
+html[data-theme="dark"] .tema-toggle, html[data-theme="dark"] .notif-bell { background: var(--bg-elev); border-color: #2a3a57; color: var(--text); }
+html[data-theme="dark"] .tema-toggle:hover, html[data-theme="dark"] .notif-bell:hover,
+html[data-theme="dark"] .notif-area.show .notif-bell { background: var(--brand-soft); border-color: #33518c; color: var(--brand-700); }
+html[data-theme="dark"] .notif-bell .notif-badge { box-shadow: 0 0 0 2px var(--bg-page); }
+html[data-theme="dark"] .user-avatar { border-color: var(--bg-elev); box-shadow: 0 0 0 1px #2a3a57; }
+
+/* Kartu */
+html[data-theme="dark"] .card { background: var(--bg-surface); border-color: var(--border); }
+html[data-theme="dark"] .card .card-header { border-bottom-color: var(--border); }
+html[data-theme="dark"] .card .card-footer { background: var(--bg-inset); border-top-color: var(--border); }
+html[data-theme="dark"] .card .filter-grid { background: var(--bg-inset); border-color: var(--border); }
+html[data-theme="dark"] .card.card-filter .filter-grid { background: none; border-top-color: var(--border); }
+html[data-theme="dark"] .badge-light { background: var(--bg-elev); color: var(--text); }
+html[data-theme="dark"] hr { border-color: var(--border); }
+
+/* Isian form */
+html[data-theme="dark"] .form-control, html[data-theme="dark"] .custom-select,
+html[data-theme="dark"] .dataTables_wrapper select, html[data-theme="dark"] .dataTables_wrapper input[type="search"],
+html[data-theme="dark"] #detail_kategori .form-control, html[data-theme="dark"] .filter-grid .form-control { background-color: var(--bg-inset); border-color: #2a3a57; color: var(--text-strong); }
+html[data-theme="dark"] .form-control::placeholder { color: var(--text-faint); }
+html[data-theme="dark"] .form-control[readonly], html[data-theme="dark"] .form-control:disabled,
+html[data-theme="dark"] .tb-form .filter-grid .form-control[readonly] { background-color: #18233b; color: var(--text-muted); }
+html[data-theme="dark"] .form-control:focus { border-color: var(--brand-600); box-shadow: 0 0 0 3px rgba(59, 118, 240, .25); }
+html[data-theme="dark"] label, html[data-theme="dark"] .form-control-label { color: var(--text); }
+html[data-theme="dark"] .card .filter-grid label { color: var(--text-muted); }
+html[data-theme="dark"] select.form-control option { background: var(--bg-elev); color: var(--text); }
+html[data-theme="dark"] select.form-control::picker(select) { background: var(--bg-elev); border-color: #2a3a57; }
+html[data-theme="dark"] select.form-control option:is(:hover, :focus-visible) { background: #1c2a49; color: var(--text-strong); }
+
+/* Tombol */
+html[data-theme="dark"] .btn-reset, html[data-theme="dark"] .dt-buttons .btn,
+html[data-theme="dark"] .btn-secondary { background: var(--bg-elev); border-color: #2a3a57; color: var(--text); }
+html[data-theme="dark"] .dt-buttons .btn:hover { background: #1c2a49; border-color: #33518c; color: var(--text-strong); }
+html[data-theme="dark"] .icon-btn { background: var(--bg-elev); border-color: #2a3a57; color: #cbd5e1 !important; }
+html[data-theme="dark"] .icon-btn:hover { background: var(--brand-soft); border-color: #33518c; color: var(--brand-700) !important; }
+html[data-theme="dark"] .icon-btn.danger:hover { background: var(--danger-bg); border-color: #6b2227; color: var(--danger-fg) !important; }
+html[data-theme="dark"] .icon-btn.konfirmasi { background: var(--brand-600); border-color: var(--brand-600); color: #fff !important; }
+html[data-theme="dark"] .btn-file { background: var(--brand-soft); color: var(--brand-700); }
+
+/* Menu melayang: dropdown, profil, notifikasi, daftar pilihan, pilih kolom, bubble detail, popup */
+html[data-theme="dark"] .dropdown-menu, html[data-theme="dark"] .user-menu.dropdown-menu,
+html[data-theme="dark"] .notif-menu.dropdown-menu, html[data-theme="dark"] .m-picker,
+html[data-theme="dark"] .dt-bubble, html[data-theme="dark"] .pr-pop,
+html[data-theme="dark"] div.dt-button-collection, html[data-theme="dark"] .dropdown-menu.dt-button-collection { background: var(--bg-elev) !important; border-color: #2a3a57 !important; box-shadow: 0 16px 40px rgba(0, 0, 0, .5) !important; color: var(--text); }
+html[data-theme="dark"] .dt-bubble::after { background: var(--bg-elev); border-color: #2a3a57; }
+html[data-theme="dark"] .notif-head, html[data-theme="dark"] .dt-bubble-head { background: #18243f; border-bottom-color: #2a3a57; }
+html[data-theme="dark"] .notif-all, html[data-theme="dark"] .dt-bubble-foot { background: #121c33; border-top-color: #2a3a57; }
+html[data-theme="dark"] .notif-item, html[data-theme="dark"] .m-picker-opt { color: var(--text); }
+html[data-theme="dark"] .notif-item:hover, html[data-theme="dark"] .m-picker-opt:hover, html[data-theme="dark"] .m-picker-opt:active,
+html[data-theme="dark"] .user-menu .nav-link:hover, html[data-theme="dark"] .user-menu .nav-link:focus-visible,
+html[data-theme="dark"] .pr-item:hover, html[data-theme="dark"] .pr-item.is-active,
+html[data-theme="dark"] .dt-button.buttons-columnVisibility:hover { background: #1c2a49 !important; color: var(--text-strong) !important; }
+html[data-theme="dark"] .user-menu .nav-link { color: var(--text) !important; }
+html[data-theme="dark"] .user-menu .nav-link.text-danger { color: var(--danger-fg) !important; }
+html[data-theme="dark"] .user-menu .nav-link.text-danger:hover { background: var(--danger-bg) !important; }
+html[data-theme="dark"] div.dt-button-collection::before, html[data-theme="dark"] .dropdown-menu.dt-button-collection::before { border-bottom-color: #2a3a57; }
+html[data-theme="dark"] .dt-button.buttons-columnVisibility::before { background: var(--bg-inset); border-color: #3b4b68; }
+html[data-theme="dark"] .dt-button.buttons-columnVisibility.active::before { background: var(--brand-600); border-color: var(--brand-600); }
+html[data-theme="dark"] .pr-search { background: var(--bg-inset); border-color: #2a3a57; color: var(--text-strong); }
+html[data-theme="dark"] .ed-loading, html[data-theme="dark"] #page-sukses .ps-card { background: var(--bg-elev); border-color: #2a3a57; color: var(--text); }
+html[data-theme="dark"] #page-sukses .ps-ikon { background: #0f2e22; color: #4ade80; }
+html[data-theme="dark"] .ed-close { background: var(--bg-elev); border-color: #2a3a57; color: var(--text); }
+
+/* Tabel */
+html[data-theme="dark"] .table { color: var(--text); }
+html[data-theme="dark"] .table td, html[data-theme="dark"] .table th { border-color: #1e2a42; }
+html[data-theme="dark"] .table thead th { background: var(--bg-inset); border-bottom-color: #22304a; color: var(--text-muted); }
+html[data-theme="dark"] .table-striped tbody tr:nth-of-type(odd) { background-color: rgba(255, 255, 255, .025); }
+html[data-theme="dark"] .table-scroll, html[data-theme="dark"] .rq-table { border-color: #1e2a42; }
+html[data-theme="dark"] #tabel-baru tbody td { background: var(--row-bg, #111a2e); border-top-color: #1e2a42; }
+html[data-theme="dark"] #tabel-baru tbody tr:hover > td { background: #1a2744; }
+html[data-theme="dark"] #tabel-baru .col-surat { box-shadow: 1px 0 0 #22304a; }
+html[data-theme="dark"] #tabel-baru tr.table-success { --row-bg: #0f2620; }
+html[data-theme="dark"] #tabel-baru tr.table-primary { --row-bg: #111f3d; }
+html[data-theme="dark"] #tabel-baru tr.table-warning { --row-bg: #272310; }
+html[data-theme="dark"] #tabel-baru tr.table-secondary { --row-bg: #141d30; }
+html[data-theme="dark"] #tabel-baru tr.close-gagal { --row-bg: #26151f; }
+html[data-theme="dark"] #tabel-baru td.data-darurat { background: #3b1518 !important; color: #fca5a5 !important; }
+html[data-theme="dark"] .chip-surat { background: #1b2640; color: var(--text); }
+html[data-theme="dark"] .chip-surat.bg-danger { background: #3b1518 !important; color: #fca5a5 !important; }
+html[data-theme="dark"] .chip-surat.bg-primary { background: #14274d !important; color: #9dbcff !important; }
+html[data-theme="dark"] .st-none { --chip-bg: #1e293b; --chip-fg: #94a3b8; }
+html[data-theme="dark"] .rq-status.baru { background: #3a2f0b; color: #facc15; }
+html[data-theme="dark"] .rq-status.diproses { background: #0f2e22; color: #4ade80; }
+html[data-theme="dark"] .dataTables_info, html[data-theme="dark"] .dataTables_length label,
+html[data-theme="dark"] .dataTables_filter label { color: var(--text-muted); }
+html[data-theme="dark"] .page-link { background: var(--bg-elev); border-color: #2a3a57; color: var(--text); }
+html[data-theme="dark"] .page-item.disabled .page-link { background: var(--bg-inset); color: var(--text-faint); }
+html[data-theme="dark"] .page-item.active .page-link { background: var(--brand-600); border-color: var(--brand-600); color: #fff; }
+
+/* Analytic: tabel ringkasan & grafik Google (dibalik warnanya supaya terbaca di latar gelap) */
+html[data-theme="dark"] .tabel-analytic tbody td { border-color: #1e2a42 !important; }
+html[data-theme="dark"] .tabel-analytic tbody tr:nth-of-type(odd) td { background: rgba(255, 255, 255, .025); }
+/* Grafik: kotaknya ikut gelap, latar putih di dalam grafik dibuat tembus, lalu warnanya dibalik
+   (teks & garis jadi terang, rona batang tetap) */
+html[data-theme="dark"] [id^="columnchart_"] { background: var(--bg-surface) !important; border-color: var(--border) !important; }
+html[data-theme="dark"] [id^="columnchart_"] svg, html[data-theme="dark"] #detail_kategori svg { filter: invert(.92) hue-rotate(180deg) saturate(1.25); }
+html[data-theme="dark"] [id^="columnchart_"] svg rect[fill="#ffffff"], html[data-theme="dark"] #detail_kategori svg rect[fill="#ffffff"] { fill-opacity: 0; }
+/* Tabel ringkasan Analytic: sel putih & pastel diganti rona gelap dengan teks terang */
+html[data-theme="dark"] .table, html[data-theme="dark"] .table-scroll { background-color: transparent; }
+html[data-theme="dark"] .table tbody tr:hover { background-color: #1a2744; }
+html[data-theme="dark"] .tabel-analytic tbody td, html[data-theme="dark"] .tabel-analytic tfoot td { background-color: var(--bg-surface); color: var(--text); }
+html[data-theme="dark"] .tabel-analytic tbody td:first-child { color: var(--text-strong); }
+html[data-theme="dark"] .tabel-analytic td.bg-inquiry   { background-color: #2a161c; }
+html[data-theme="dark"] .tabel-analytic td.bg-quotation { background-color: #121f3a; }
+html[data-theme="dark"] .tabel-analytic td.bg-rate-quo  { background-color: #2a2410; }
+html[data-theme="dark"] .tabel-analytic td.bg-po        { background-color: #0f2620; }
+html[data-theme="dark"] .bg-po-red    { background-color: #3b1518 !important; color: #fca5a5 !important; }
+html[data-theme="dark"] .bg-po-yellow { background-color: #3a2f0b !important; color: #facc15 !important; }
+html[data-theme="dark"] .bg-po-green  { background-color: #0f2e22 !important; color: #4ade80 !important; }
+html[data-theme="dark"] .tabel-analytic [style*="background-color: #f1f3f5"] { background-color: #18233b !important; color: var(--text) !important; }
+
+/* Teks bantu */
+html[data-theme="dark"] .text-muted, html[data-theme="dark"] .toolbar-sub, html[data-theme="dark"] .tb-sub { color: var(--text-muted) !important; }
+html[data-theme="dark"] .header-welcome, html[data-theme="dark"] .card-title, html[data-theme="dark"] .tb-title { color: var(--text-strong); }
+html[data-theme="dark"] a { color: var(--brand-700); }
+html[data-theme="dark"] .btn-primary, html[data-theme="dark"] a.btn-primary, html[data-theme="dark"] a.btn-danger { color: #fff; }
+html[data-theme="dark"] ::-webkit-scrollbar-thumb { background: #2a3a57; border-radius: 99px; }
+html[data-theme="dark"] ::-webkit-scrollbar-track { background: transparent; }
+
+/* Pemilih rentang tanggal (filter) */
+html[data-theme="dark"] .drp-field, html[data-theme="dark"] .drp-btn { background: var(--bg-inset); border-color: #2a3a57; box-shadow: none; color: var(--text-strong); }
+html[data-theme="dark"] .drp-field.is-empty { color: var(--text-faint); }
+html[data-theme="dark"] .drp-btn { color: var(--brand-700); }
+html[data-theme="dark"] .drp-field:hover, html[data-theme="dark"] .drp-btn:hover { border-color: #33518c; }
+html[data-theme="dark"] .drp-pop { background: var(--bg-elev); border-color: #2a3a57; box-shadow: 0 16px 40px rgba(0, 0, 0, .5); color: var(--text); }
+html[data-theme="dark"] .drp-title:hover { background: #1c2a49; }
+html[data-theme="dark"] .drp-nav { background: var(--bg-inset); border-color: #2a3a57; color: var(--text); }
+html[data-theme="dark"] .drp-day, html[data-theme="dark"] .drp-cell, html[data-theme="dark"] .drp-foot button { color: var(--text); }
+html[data-theme="dark"] .drp-day.is-out { color: var(--text-faint); }
+html[data-theme="dark"] .drp-day.is-holiday { color: #fca5a5; }
+html[data-theme="dark"] .drp-day.is-holiday:hover { background: #3b1518; color: #fecaca; }
+html[data-theme="dark"] .drp-day.is-edge, html[data-theme="dark"] .drp-cell.is-edge { background: var(--brand-600); color: #fff; }
+
+/* Tambah Data: pemilih perusahaan terdaftar */
+html[data-theme="dark"] .pr-search, html[data-theme="dark"] .pr-search:focus { background-color: var(--bg-inset); border-color: #2a3a57; color: var(--text-strong); }
+html[data-theme="dark"] .pr-item { color: var(--text); }
+html[data-theme="dark"] .pr-item small, html[data-theme="dark"] .pr-batal { color: var(--text-muted); }
+html[data-theme="dark"] .pr-batal:hover, html[data-theme="dark"] .pr-batal:focus { background: #1c2a49; color: var(--brand-700); }
+html[data-theme="dark"] .tb-nosurat span { color: var(--text-faint); }
