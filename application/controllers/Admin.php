@@ -67,9 +67,8 @@ class Admin extends CI_Controller {
     public function transfer_data($id){
         $where = array('nomor_urut' => $id);
         
-        $conn = new mysqli('localhost', 'adminindo_penomoransurat', 'testindo2017', 'adminindo_beforepurchasingorder');
-        $row = $conn->query("SELECT * FROM tsurat order by nomor_urut desc")->fetch_array();
-        $row_conn = $conn->query("SELECT * FROM tsurat_website where nomor_urut = '$id'")->fetch_array();
+        $row = $this->db->order_by('nomor_urut', 'desc')->limit(1)->get('tsurat')->row_array();
+        $row_conn = $this->db->get_where('tsurat_website', $where)->row_array();
         
       	
         $kode_jenis = "INQ";

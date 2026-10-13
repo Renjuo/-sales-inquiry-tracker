@@ -22,7 +22,7 @@ class MY_Controller extends CI_Controller {
         if (!empty($env_url)) return rtrim($env_url, '/') . '/';
 
         // Cek 3: Fallback ke URL Portal Absensi aktif saat ini
-        return 'https://guardian-meanwhile-upper-folders.trycloudflare.com';
+       /* return 'https://erp.testindo.co.id/';*/
     }
 
     public function __construct() {

@@ -83,7 +83,7 @@ class Login extends CI_Controller
 
 		// Setelah logout: ke halaman login ERP ($config['erp_url'], bisa diganti lewat ERP_URL di .env)
 
-		redirect($this->config->item('erp_url'));
+		redirect($this->config->item('erp_url') ?: 'login'); // erp_url kosong = login lokal
 	}
 
 	public function tambah()

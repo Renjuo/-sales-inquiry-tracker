@@ -25,7 +25,7 @@ class Sso extends CI_Controller {
         if (!empty($env_url)) return rtrim($env_url, '/') . '/';
 
         // Cek 3: Fallback ke URL Portal Absensi aktif saat ini
-        return 'https://guardian-meanwhile-upper-folders.trycloudflare.com';
+        /*return 'https://erp.testindo.co.id/';*/
     }
 
     public function __construct() {
@@ -38,21 +38,22 @@ class Sso extends CI_Controller {
      * Endpoint Callback SSO: /sso atau index.php/sso
      */
     public function index() {
-        // Ambil data GET (dengan fallback langsung ke $_GET)
-        $token      = $this->input->get('token', TRUE) ?: (isset($_GET['token']) ? $_GET['token'] : null);
-        if (empty($token)) {
-            $token  = $this->input->get('sso_token', TRUE) ?: (isset($_GET['sso_token']) ? $_GET['sso_token'] : null);
+        // Token diambil dari POST supaya tidak tampil di address bar / riwayat browser.
+        // Lewat URL (?token=...) hanya diterima bila sso_allow_get_token = TRUE (portal lama).
+        $token      = $this->input->post('token', TRUE) ?: $this->input->post('sso_token', TRUE);
+        if (empty($token) && $this->config->item('sso_allow_get_token')) {
+            $token  = $this->input->get('token', TRUE) ?: $this->input->get('sso_token', TRUE);
         }
 
-        $user_id    = $this->input->get('user_id', TRUE) ?: (isset($_GET['user_id']) ? $_GET['user_id'] : null);
-        $email      = $this->input->get('email', TRUE) ?: (isset($_GET['email']) ? $_GET['email'] : null);
-        $name       = $this->input->get('name', TRUE) ?: (isset($_GET['name']) ? $_GET['name'] : null);
-        $role       = $this->input->get('role', TRUE) ?: (isset($_GET['role']) ? $_GET['role'] : 'operator');
-        $department = $this->input->get('department', TRUE) ?: (isset($_GET['department']) ? $_GET['department'] : 'Sales');
-        $username   = $this->input->get('username', TRUE) ?: (isset($_GET['username']) ? $_GET['username'] : $name);
+        $user_id    = $this->input->post_get('user_id', TRUE) ?: (isset($_GET['user_id']) ? $_GET['user_id'] : null);
+        $email      = $this->input->post_get('email', TRUE) ?: (isset($_GET['email']) ? $_GET['email'] : null);
+        $name       = $this->input->post_get('name', TRUE) ?: (isset($_GET['name']) ? $_GET['name'] : null);
+        $role       = $this->input->post_get('role', TRUE) ?: (isset($_GET['role']) ? $_GET['role'] : 'operator');
+        $department = $this->input->post_get('department', TRUE) ?: (isset($_GET['department']) ? $_GET['department'] : 'Sales');
+        $username   = $this->input->post_get('username', TRUE) ?: (isset($_GET['username']) ? $_GET['username'] : $name);
         
         // Flag viewer dari URL
-        $is_viewer  = ($this->input->get('is_viewer', TRUE) === 'true');
+        $is_viewer  = ($this->input->post_get('is_viewer', TRUE) === 'true');
 
         // Jika tidak ada token -> redirect ke Portal Absensi Staff untuk login terlebih dahulu
         if (empty($token)) {

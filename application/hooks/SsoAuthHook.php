@@ -15,11 +15,18 @@ class SsoAuthHook {
         $env_url = getenv('PORTAL_ABSENSI_URL') ?: (isset($_ENV['PORTAL_ABSENSI_URL']) ? $_ENV['PORTAL_ABSENSI_URL'] : null);
         if (!empty($env_url)) return rtrim($env_url, '/') . '/';
 
-        return 'https://guardian-meanwhile-upper-folders.trycloudflare.com';
+        /*return 'https://erp.testindo.co.id/';*/
     }
 
     public function checkAuth() {
         $CI =& get_instance();
+
+        // Portal Absensi kosong = SSO tidak dipakai (login lokal), jangan cegat apa pun
+        $portal_url = $this->get_portal_url($CI);
+        if (empty($portal_url)) {
+            return;
+        }
+
         if (!isset($CI->session)) {
             $CI->load->library('session');
         }
@@ -45,7 +52,7 @@ class SsoAuthHook {
 
         // Jika belum login, langsung redirect ke Portal Absensi Staff
         if (!$is_logged_in) {
-            redirect($this->get_portal_url($CI));
+            redirect($portal_url);
             exit;
         }
     }

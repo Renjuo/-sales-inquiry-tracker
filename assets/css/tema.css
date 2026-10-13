@@ -108,8 +108,18 @@ html[data-theme="dark"] aside.left-panel {
     --sb-hover-bg: #18243f;
     --sb-icon: #7f8ca6;
 }
-/* Logo lengkap bertulisan gelap: diberi alas putih supaya terbaca (logo ikon saat sidebar diciutkan tidak perlu) */
-html[data-theme="dark"] aside.left-panel .navbar-brand:not(.hidden) img { background: #fff; border-radius: 10px; padding: 4px 8px; }
+/* Tablet & HP: drawer sidebar & kepalanya berlatar putih pekat di app.css, ikut digelapkan */
+@media (max-width: 991.98px) {
+    html[data-theme="dark"] aside.left-panel,
+    html[data-theme="dark"] .open aside.left-panel,
+    html[data-theme="dark"] aside.left-panel .navbar-header { background: var(--bg-inset); }
+    html[data-theme="dark"] aside.left-panel { box-shadow: 0 10px 40px rgba(0, 0, 0, .5); }
+}
+/* Logo lengkap bertulisan gelap: warnanya dibalik supaya tulisan jadi terang tanpa alas putih
+   (rona biru/merah tetap) */
+html[data-theme="dark"] aside.left-panel .navbar-brand:not(.hidden) img { filter: invert(.92) hue-rotate(180deg) saturate(1.25); }
+/* Logo ikon (sidebar diciutkan) berlatar putih pekat: dibalik jadi hitam lalu dilebur ke warna sidebar */
+html[data-theme="dark"] aside.left-panel .navbar-brand.hidden img { filter: invert(1) hue-rotate(180deg) saturate(1.25); mix-blend-mode: screen; }
 html[data-theme="dark"] .menutoggle, html[data-theme="dark"] .sidebar-close,
 html[data-theme="dark"] .tema-toggle, html[data-theme="dark"] .notif-bell { background: var(--bg-elev); border-color: #2a3a57; color: var(--text); }
 html[data-theme="dark"] .tema-toggle:hover, html[data-theme="dark"] .notif-bell:hover,
@@ -221,7 +231,9 @@ html[data-theme="dark"] .tabel-analytic td.bg-po        { background-color: #0f2
 html[data-theme="dark"] .bg-po-red    { background-color: #3b1518 !important; color: #fca5a5 !important; }
 html[data-theme="dark"] .bg-po-yellow { background-color: #3a2f0b !important; color: #facc15 !important; }
 html[data-theme="dark"] .bg-po-green  { background-color: #0f2e22 !important; color: #4ade80 !important; }
-html[data-theme="dark"] .tabel-analytic [style*="background-color: #f1f3f5"] { background-color: #18233b !important; color: var(--text) !important; }
+html[data-theme="dark"] .tabel-analytic [style*="background-color: #f1f3f5"],
+html[data-theme="dark"] .bulan-detail [style*="background-color: #f1f3f5"] { background-color: #18233b !important; color: var(--text) !important; }
+html[data-theme="dark"] .bulan-detail [style*="color: #0056b3"] { color: #9dbcff !important; }
 
 /* Teks bantu */
 html[data-theme="dark"] .text-muted, html[data-theme="dark"] .toolbar-sub, html[data-theme="dark"] .tb-sub { color: var(--text-muted) !important; }

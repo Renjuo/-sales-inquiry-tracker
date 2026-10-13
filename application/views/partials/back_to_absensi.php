@@ -4,7 +4,7 @@ $CI =& get_instance();
 $portal_url = $CI->config->item('portal_absensi_url') 
            ?: getenv('PORTAL_ABSENSI_URL') 
            ?: (isset($_ENV['PORTAL_ABSENSI_URL']) ? $_ENV['PORTAL_ABSENSI_URL'] : null)
-           ?: 'https://guardian-meanwhile-upper-folders.trycloudflare.com';
+           /*?: 'https://erp.testindo.co.id/';*/
 ?>
 <!-- Tombol Kembali ke Portal Absensi Staff (Letakkan di Sidebar/Header BeforePO) -->
 <a href="<?php echo htmlspecialchars(rtrim($portal_url, '/') . '/', ENT_QUOTES, 'UTF-8'); ?>" 
