@@ -297,8 +297,8 @@ include 'header.php';
                   </div>
                   <div class="form-group"><label for="sumber_inq_web">Sumber Inquiry Berdasarkan Website</label>
                     <select class="form-control" name="sumber_inq_web" id="sumber_inq_web">
-                      <option >Testindo.co.id</option>
-                      <option >Testindo.com</option>
+                      <option >Your_company.co.id</option>
+                      <option >Your_company.com</option>
                       <option >Vibrasindo.co.id</option>
                       <option >Testingindonesia.co.id</option>
                       <option >Dataloggerindonesia.co.id</option>

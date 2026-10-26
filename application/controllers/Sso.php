@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Sso extends CI_Controller {
 
     /**
-     * URL Portal Absensi Staff PT Testindo
+     * URL Portal Absensi Staff PT Your_company
      */
     //private function get_portal_url() {
         // Cek 1: Dari config CI3 (application/config/config.php -> $config['portal_absensi_url'])
@@ -25,7 +25,7 @@ class Sso extends CI_Controller {
         if (!empty($env_url)) return rtrim($env_url, '/') . '/';
 
         // Cek 3: Fallback ke URL Portal Absensi aktif saat ini
-        return 'https://erp.testindo.co.id/';*/
+        return 'https://erp.your_company.co.id/';*/
     //}
 
     public function __construct() {
@@ -200,7 +200,7 @@ class Sso extends CI_Controller {
     }
 
     /**
-     * Halaman antara setelah SSO sukses: membersihkan address bar lalu membuka Data Testindo.
+     * Halaman antara setelah SSO sukses: membersihkan address bar lalu membuka Data Your_company.
      */
     public function masuk() {
         if (!$this->session->userdata('is_logged_in')) {

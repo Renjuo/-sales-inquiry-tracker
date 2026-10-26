@@ -1108,7 +1108,7 @@ body.ed-lock { overflow: hidden; }
 .ed-confirm .btn-danger { background: #dc2626; border-color: #dc2626; color: #fff; }
 .ed-confirm .btn-danger:hover, .ed-confirm .btn-danger:focus { background: #b91c1c; border-color: #b91c1c; }
 
-/* Tombol aksi baris tabel (edit / hapus): dipakai di Data Testindo dan Request Customer */
+/* Tombol aksi baris tabel (edit / hapus): dipakai di Data Your_company dan Request Customer */
 .row-actions { display: flex; gap: 6px; justify-content: center; }
 .icon-btn { align-items: center; background: #fff; border: 1px solid var(--border); border-radius: 8px; color: #475569 !important; display: inline-flex; height: 32px; justify-content: center; transition: background-color .15s ease, border-color .15s ease, color .15s ease; width: 32px; }
 .icon-btn:hover { background: var(--brand-soft); border-color: #c7d7fe; color: var(--brand-700) !important; text-decoration: none; }

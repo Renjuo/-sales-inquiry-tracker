@@ -18,7 +18,7 @@ $e = function ($t) { return htmlspecialchars((string) $t, ENT_QUOTES, 'UTF-8'); 
                 <div class="card">
                     <div class="card-header">
                         <strong class="card-title">Request Customer</strong>
-                        <div class="toolbar-sub text-muted" style="font-size: 12.5px;"><?php echo count($requests); ?> request dari form customer &middot; klik Konfirmasi untuk memeriksa, melengkapi, lalu menyimpannya ke Data Testindo</div>
+                        <div class="toolbar-sub text-muted" style="font-size: 12.5px;"><?php echo count($requests); ?> request dari form customer &middot; klik Konfirmasi untuk memeriksa, melengkapi, lalu menyimpannya ke Data Your_company</div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -69,7 +69,7 @@ $e = function ($t) { return htmlspecialchars((string) $t, ENT_QUOTES, 'UTF-8'); 
         </div>
     </div>
 </div>
-<!-- Konfirmasi hapus: popup bergaya sama dengan Data Testindo, pengganti confirm() bawaan browser -->
+<!-- Konfirmasi hapus: popup bergaya sama dengan Data Your_company, pengganti confirm() bawaan browser -->
 <div id="ed-modal" class="ed-modal"></div>
 <script>
   (function ($) {

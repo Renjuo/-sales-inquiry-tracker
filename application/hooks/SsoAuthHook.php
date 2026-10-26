@@ -15,7 +15,7 @@ class SsoAuthHook {
         $env_url = getenv('PORTAL_ABSENSI_URL') ?: (isset($_ENV['PORTAL_ABSENSI_URL']) ? $_ENV['PORTAL_ABSENSI_URL'] : null);
         if (!empty($env_url)) return rtrim($env_url, '/') . '/';
 
-        /*return 'https://erp.testindo.co.id/';*/
+        /*return 'https://erp.your_company.co.id/';*/
     }
 
     public function checkAuth() {

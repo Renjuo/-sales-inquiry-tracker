@@ -4,11 +4,11 @@ $CI =& get_instance();
 $portal_url = $CI->config->item('portal_absensi_url') 
            ?: getenv('PORTAL_ABSENSI_URL') 
            ?: (isset($_ENV['PORTAL_ABSENSI_URL']) ? $_ENV['PORTAL_ABSENSI_URL'] : null)
-           /*?: 'https://erp.testindo.co.id/';*/
+           /*?: 'https://erp.your_company.co.id/';*/
 ?>
 <!-- Tombol Kembali ke Portal Absensi Staff (Letakkan di Sidebar/Header BeforePO) -->
 <a href="<?php echo htmlspecialchars(rtrim($portal_url, '/') . '/', ENT_QUOTES, 'UTF-8'); ?>" 
    style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background-color: rgba(56, 189, 248, 0.1); color: #0284c7; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid rgba(56, 189, 248, 0.3); transition: all 0.2s;"
-   title="Kembali ke Portal Absensi Staff PT Testindo">
+   title="Kembali ke Portal Absensi Staff PT Your_company">
     <span>🔙 Portal Absensi Staff</span>
 </a>

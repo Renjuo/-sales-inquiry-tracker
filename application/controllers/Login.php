@@ -16,7 +16,7 @@ class Login extends CI_Controller
 	{
 		// Sudah login di perangkat ini -> langsung masuk
 		if ($this->session->userdata('username')) {
-			redirect(base_url('data-testindo'));
+			redirect(base_url('data-your_company'));
 		}
 
 		// SSO aktif: belum login -> ke halaman login Portal Absensi (masuk BeforePO lewat menu portal di sana)
@@ -25,7 +25,7 @@ class Login extends CI_Controller
 		}
 
 		$data = [
-			'title' => 'PT Testindo - Login'
+			'title' => 'PT Your_company - Login'
 		];
 
 		$this->load->view('login', $data);
@@ -65,11 +65,11 @@ class Login extends CI_Controller
 				$this->input->set_cookie('tetap_masuk', '', '');
 			}
 
-			redirect(base_url('data-testindo'));
+			redirect(base_url('data-your_company'));
 		}
 
 		$data = [
-			'title' => 'PT Testindo - Login',
+			'title' => 'PT Your_company - Login',
 			'salah' => 'Username atau password salah'
 		];
 

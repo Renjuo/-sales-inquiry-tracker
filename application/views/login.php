@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="theme-color" content="#1e5bd6">
 		<title><?php echo $title; ?></title>
-		<meta name="description" content="Login sistem Before PO PT Testindo untuk mengelola data inquiry dan request customer.">
+		<meta name="description" content="Login sistem Before PO PT Your_company untuk mengelola data inquiry dan request customer.">
 		<link rel="icon" type="image/png" href="<?php echo base_url(); ?>images/favicon.png">
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
 <?php $this->load->view('loader'); ?>
 		<main class="login-wrap">
 			<section class="login-brand">
-				<img src="<?php echo base_url(); ?>images/testindo_logo.png" alt="PT Testindo" class="login-logo">
+				<img src="<?php echo base_url(); ?>images/testindo_logo.png" alt="PT Your_company" class="login-logo">
 				<h1>Before Purchasing Order</h1>
 				<p>Kelola inquiry, quotation, dan progres PO pelanggan dalam satu tempat.</p>
 			</section>

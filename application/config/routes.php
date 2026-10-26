@@ -55,14 +55,14 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 // ========================================================
-// SSO DARI PORTAL ABSENSI STAFF PT TESTINDO
+// SSO DARI PORTAL ABSENSI STAFF PT YOUR_COMPANY
 // ========================================================
 $route['sso'] = 'sso/index';
 // URL lama admin/data25/TST tetap jalan -> admin/arsip/TST/25
 $route['admin/data(\d{2})/(:any)'] = 'admin/arsip/$2/$1';
 // Alamat halaman tanpa nama method/kode (alamat lama, mis. index_2/TST, tetap jalan lewat aturan di bawah)
-$route['data-testindo']             = 'admin/index_2/TST';
-$route['data-testindo/20(\d{2})']   = 'admin/arsip/TST/$1';
+$route['data-your_company']             = 'admin/index_2/TST';
+$route['data-your_company/20(\d{2})']   = 'admin/arsip/TST/$1';
 $route['data-vibrasindo']           = 'admin/index_2/VB';
 $route['tambah-data']               = 'admin/tambah';
 $route['request-customer']          = 'admin/request_customer';

@@ -10,8 +10,8 @@ if (!isset($_SESSION['username'])) {
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>PT Testindo - Before PO Admin</title>
-    <meta name="description" content="PT Testindo - Before PO Admin">
+    <title>PT Your_company - Before PO Admin</title>
+    <meta name="description" content="PT Your_company - Before PO Admin">
     <meta name="theme-color" content="#1e5bd6">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="only light">
@@ -113,21 +113,21 @@ $pesan_berhasil = $this->session->userdata('berhasil'); if ($pesan_berhasil) { $
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="<?php echo base_url(); ?>data-testindo"><img src="<?php echo base_url(); ?>images/testindo_logo.png" alt="Logo"></a>
-                <a class="navbar-brand hidden" href="<?php echo base_url(); ?>data-testindo"><img src="<?php echo base_url(); ?>images/logo-crop.png" alt="Logo"></a>
+                <a class="navbar-brand" href="<?php echo base_url(); ?>data-your_company"><img src="<?php echo base_url(); ?>images/testindo_logo.png" alt="Logo"></a>
+                <a class="navbar-brand hidden" href="<?php echo base_url(); ?>data-your_company"><img src="<?php echo base_url(); ?>images/logo-crop.png" alt="Logo"></a>
                 <button type="button" class="sidebar-close" id="sidebarClose" aria-label="Tutup menu"><span class="hamburger is-x" aria-hidden="true"><span></span><span></span><span></span></span></button>
             </div>
 
             <div id="main-menu" class="main-menu collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <?php if ($is_admin) { ?>
-                        <!-- Data Testindo: tahun berjalan + semua tahun sebelumnya (otomatis bertambah tiap ganti tahun) -->
+                        <!-- Data Your_company: tahun berjalan + semua tahun sebelumnya (otomatis bertambah tiap ganti tahun) -->
                         <li class="menu-item-has-children dropdown <?php echo ($is_active('index_2', 'TST') || $is_active('arsip', 'TST')) ? 'active' : ''; ?>">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-database"></i>Data Testindo</a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-database"></i>Data Your_company</a>
                             <ul class="sub-menu children dropdown-menu">
-                                <li><i class="fa fa-database"></i><a href="<?php echo base_url(); ?>data-testindo">Data Testindo</a></li>
+                                <li><i class="fa fa-database"></i><a href="<?php echo base_url(); ?>data-your_company">Data Your_company</a></li>
                                 <?php for ($th = date('Y') - 1; $th >= 2023; $th--) { ?>
-                                    <li><i class="fa fa-calendar"></i><a href="<?php echo base_url(); ?>data-testindo/<?php echo $th; ?>">Data Testindo <?php echo $th; ?></a></li>
+                                    <li><i class="fa fa-calendar"></i><a href="<?php echo base_url(); ?>data-your_company/<?php echo $th; ?>">Data Your_company <?php echo $th; ?></a></li>
                                 <?php } ?>
                             </ul>
                         </li>
@@ -136,7 +136,7 @@ $pesan_berhasil = $this->session->userdata('berhasil'); if ($pesan_berhasil) { $
                         </li>
                     <?php } else { ?>
                         <li class="<?php echo $is_active('index_2', 'TST'); ?>">
-                            <a href="<?php echo base_url(); ?>data-testindo"> <i class="menu-icon fa fa-database"></i>Data Testindo</a>
+                            <a href="<?php echo base_url(); ?>data-your_company"> <i class="menu-icon fa fa-database"></i>Data Your_company</a>
                         </li>
                     <?php } ?>
 
@@ -275,7 +275,7 @@ $pesan_berhasil = $this->session->userdata('berhasil'); if ($pesan_berhasil) { $
                                 if (!total) $list.append('<div class="notif-empty"><i class="fa fa-inbox"></i>Belum ada notifikasi baru</div>');
                                 chat.data.forEach(function (d) {
                                     item('fa-comments', d.username + ' (' + d.level + ')', d.pesan + ' · ' + d.nama_perusahaan_klien + ' · ' + jam(d.waktu))
-                                        .addClass('notif-chat').attr('href', base + (d.kode_website === 'VB' ? 'data-vibrasindo' : 'data-testindo'))
+                                        .addClass('notif-chat').attr('href', base + (d.kode_website === 'VB' ? 'data-vibrasindo' : 'data-your_company'))
                                         .on('click', function (e) {
                                             // Sudah di halaman tabelnya: langsung buka chat; selain itu dibuka setelah halaman dimuat
                                             if (window.bpBukaChat && bpBukaChat(d.nomor_surat)) { e.preventDefault(); e.stopPropagation(); return; }

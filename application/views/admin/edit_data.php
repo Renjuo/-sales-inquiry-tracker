@@ -180,8 +180,8 @@ $urut = $u ? str_pad($u->nomor_urut, 4, '0', STR_PAD_LEFT) : '';
                   <div class="form-group"><label>Sumber Inquiry Berdasarkan Website</label>
                     <select class="form-control" name="sumber_inq_web" id="sumber_inq_web">
                       <option ><?php echo html_escape($u->sumber_inq_web) ?></option>
-                      <option >Testindo.co.id</option>
-                      <option >Testindo.com</option>
+                      <option >Your_company.co.id</option>
+                      <option >Your_company.com</option>
                       <option >Vibrasindo.co.id</option>
                       <option >Testingindonesia.co.id</option>
                       <option >Dataloggerindonesia.co.id</option>

@@ -53,10 +53,10 @@ class Admin extends CI_Controller {
 		$data['table_2'] = $this->M_admin->tampil_old_data()->result(); 
 		$this->load->view('admin/index_3', $data);
 	}
-	// Data tahun sebelumnya, contoh admin/arsip/TST/25 = Data Testindo 2025.
+	// Data tahun sebelumnya, contoh admin/arsip/TST/25 = Data Your_company 2025.
 	// Otomatis: begitu masuk tahun baru, tahun lalu langsung muncul di dropdown navbar.
 	public function arsip($kode_web, $tahun){
-		if (!preg_match('/^\d{2}$/', $tahun) || $tahun >= date('y')) redirect($kode_web == 'VB' ? 'data-vibrasindo' : 'data-testindo');
+		if (!preg_match('/^\d{2}$/', $tahun) || $tahun >= date('y')) redirect($kode_web == 'VB' ? 'data-vibrasindo' : 'data-your_company');
 		$data['table_2'] = $this->M_admin->tampil_history_data($kode_web, $tahun)->result();
 		$this->load->view('admin/index_2', $data);
 	}
@@ -64,7 +64,7 @@ class Admin extends CI_Controller {
     public function transfer($id){
         $where = array('nomor_urut' => $id);
 		$data = array (
-				'title' => "Edit Data Admin - Testindo"
+				'title' => "Edit Data Admin - Your_company"
 		);
 		$data['table_transfer'] = $this->M_admin->tampil_data_website()->result();
 		$this->load->view('admin/edit_inquiry',$data);
@@ -150,7 +150,7 @@ class Admin extends CI_Controller {
 			);
 	 
 		$this->M_admin->masukan_data($data,'your_table');
-		redirect('data-testindo');   
+		redirect('data-your_company');   
     }
     
 	public function tambah(){
@@ -326,7 +326,7 @@ class Admin extends CI_Controller {
 		}
 		// Ditampilkan sekali di halaman berikutnya (header.php), di posisi loader, hilang sendiri setelah 2 detik
 		$this->session->set_userdata('berhasil', 'Data berhasil ditambah');
-		redirect('data-testindo');
+		redirect('data-your_company');
 	}
 
 	// Request Customer untuk admin & Business Development (level dari session; fallback ke your_table seperti di header.php)
@@ -442,14 +442,14 @@ class Admin extends CI_Controller {
 
 	// Daftar isian form customer eksternal (htdocs/form_customer), masuk lewat Api::request_customer
 	public function request_customer(){
-		if (!$this->_boleh_request()) redirect('data-testindo');
+		if (!$this->_boleh_request()) redirect('data-your_company');
 		// Hanya request yang belum dikonfirmasi; yang sudah dikonfirmasi/dihapus langsung dihapus dari tabel
 		$data['requests'] = $this->db->where('status', 'Baru')->order_by('id_request', 'DESC')->get('your_table')->result();
 		$this->load->view('admin/request_customer', $data);
 	}
 
 	public function hapus_request($id){
-		if (!$this->_boleh_request()) redirect('data-testindo');
+		if (!$this->_boleh_request()) redirect('data-your_company');
 		$this->db->delete('your_table', array('id_request' => (int) $id));
 		redirect('request-customer');
 	}
@@ -665,7 +665,7 @@ class Admin extends CI_Controller {
 	 
 		$this->M_admin->update_data($where,$data,'your_table');
 		if ($this->input->is_ajax_request()) return; // popup edit: halaman tabel memuat ulang dirinya sendiri
-		redirect('data-testindo');
+		redirect('data-your_company');
 	}
     function edit_data_2($id){
 		$where = array('id_surat' => $id);
@@ -747,7 +747,7 @@ class Admin extends CI_Controller {
 		);
 	 
 		$this->M_admin->update_data($where,$data,'your_table');
-		redirect('data-testindo');
+		redirect('data-your_company');
         }else{
         $data = array(
 			'kode_jenis' => $kode_jenis,
@@ -788,14 +788,14 @@ class Admin extends CI_Controller {
 		);
 	 
 		$this->M_admin->update_data($where,$data,'your_table');
-		redirect('data-testindo');   
+		redirect('data-your_company');   
         }
 	}
     
     function hapus_data_2($id){
 		$where = array('id_surat' => $id);
 		$this->M_admin->hapus_data($where,'your_table');
-		redirect('data-testindo');
+		redirect('data-your_company');
 	}
     
 	function lihat_data($id){
@@ -807,13 +807,13 @@ class Admin extends CI_Controller {
 	function hapus_data($id){
 		$where = array('nomor_urut' => $id);
 		$this->M_admin->hapus_data($where,'your_table');
-		redirect('data-testindo');
+		redirect('data-your_company');
 	}
 	
 	function hapus_data_website($id){
 		$where = array('nomor_urut' => $id);
 		$this->M_admin->hapus_data($where,'your_table');
-		redirect('data-testindo');
+		redirect('data-your_company');
 	}
 
 	function upload_gambar(){

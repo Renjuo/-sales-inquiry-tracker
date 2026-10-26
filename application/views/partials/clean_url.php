@@ -11,7 +11,7 @@
     // Muat ulang halaman ini (pengganti location.reload(), yang akan memuat alamat dasar)
     window.bpReload = function () { location.replace(asli); };
     try {
-        // Refresh (F5) memuat alamat dasar -> server membuka Data Testindo. Kembalikan ke halaman yang tadi dibuka.
+        // Refresh (F5) memuat alamat dasar -> server membuka Data Your_company. Kembalikan ke halaman yang tadi dibuka.
         var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
         var terakhir = sessionStorage.getItem('bp_url');
         if (nav && nav.type === 'reload' && terakhir && terakhir !== asli) { location.replace(terakhir); return; }
