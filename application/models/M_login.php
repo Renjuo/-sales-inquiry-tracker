@@ -11,6 +11,6 @@ class M_login extends CI_Model{
 	}
 
 	function tampil_data(){
-		return $this->db->get('tuser');
+		return $this->db->get('your_table');
 	}
 }

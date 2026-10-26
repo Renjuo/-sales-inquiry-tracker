@@ -63,7 +63,7 @@ include 'header.php';
                     <label for="kode_jenis">Jenis Dokumen</label>
                     <select name="kode_jenis" id="kode_jenis" class="form-control" onchange="jenis(kode_jenis)" required="">
                       <?php
-                      foreach ($tjenis as $u) {
+                      foreach ($your_table as $u) {
                       ?>
                       <option value="<?php echo $u->kode_jenis ?>"><?php echo $u->keterangan_jenis ?></option>
                       <?php } ?>
@@ -82,7 +82,7 @@ include 'header.php';
                     <select name="kode_website" id="kode_website" class="form-control" onchange="website(kode_website),count_data($query,kode_website)" required="">
                       <option></option>
                       <?php
-                      foreach ($twebsite as $u) {
+                      foreach ($your_table as $u) {
                       ?>
                       <option value="<?php echo $u->kode_website ?>"><?php echo $u->keterangan_website ?></option>
                       <?php } ?>
@@ -128,9 +128,9 @@ include 'header.php';
             </div>
 
             <?php
-            // PERBAIKAN 1: Menutup foreach $tsurat langsung di sini agar tidak membungkus form di bawahnya
-            if(!empty($tsurat)) {
-                foreach ($tsurat as $u) {
+            // PERBAIKAN 1: Menutup foreach $your_table langsung di sini agar tidak membungkus form di bawahnya
+            if(!empty($your_table)) {
+                foreach ($your_table as $u) {
                     // loop kosong jika hanya digunakan sebagai pemicu data di awal template asli
                 }
             }
@@ -182,7 +182,7 @@ include 'header.php';
                   </select>
                 </div>
                 <script>
-                  // Detail kategori baru muncul setelah kategori dipilih, isinya mengikuti kategori itu (data: tabel tdetail_kategori)
+                  // Detail kategori baru muncul setelah kategori dipilih, isinya mengikuti kategori itu (data: tabel your_table)
                   $(function () {
                     var detail = <?php echo json_encode(isset($detail_kategori) ? $detail_kategori : array(), JSON_HEX_TAG | JSON_HEX_AMP | JSON_INVALID_UTF8_SUBSTITUTE); ?>;
                     var $kategori = $('#kategori'), $detail = $('#detail_kategori');
@@ -213,8 +213,8 @@ include 'header.php';
                     <select class="form-control" name="bidang_usaha" id="bidang_usaha" required>
                       <option value="">-- Pilih Bidang Usaha --</option>
                       <?php
-                      if(!empty($tbidang_usaha)) {
-                        foreach ($tbidang_usaha as $bu) {
+                      if(!empty($your_table)) {
+                        foreach ($your_table as $bu) {
                           ?>
                           <option value="<?php echo $bu->id_bidang_usaha; ?>">
                             <?php echo $bu->nama_bidang_usaha; ?>

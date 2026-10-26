@@ -2,7 +2,7 @@
 // $modal = dimuat lewat AJAX sebagai popup di tabel: hanya kartu form, tanpa header/footer
 $modal = !empty($modal);
 if (!$modal) include 'header.php';
-$u = isset($tsurat[0]) ? $tsurat[0] : null;
+$u = isset($your_table[0]) ? $your_table[0] : null;
 $urut = $u ? str_pad($u->nomor_urut, 4, '0', STR_PAD_LEFT) : '';
 ?>
 <?php if (!$modal) { ?>
@@ -92,9 +92,9 @@ $urut = $u ? str_pad($u->nomor_urut, 4, '0', STR_PAD_LEFT) : '';
                     <select class="form-control" name="bidang_usaha" id="bidang_usaha" required>
                       <option value="">-- Pilih Bidang Usaha --</option>
                       <?php
-                      if(!empty($tbidang_usaha)) {
-                        foreach ($tbidang_usaha as $bu) {
-                          // Mencocokkan ID bidang usaha yang tersimpan di database tsurat
+                      if(!empty($your_table)) {
+                        foreach ($your_table as $bu) {
+                          // Mencocokkan ID bidang usaha yang tersimpan di database your_table
                           $selected = ($bu->id_bidang_usaha == $u->bidang_usaha) ? 'selected' : '';
                           ?>
                           <option value="<?php echo $bu->id_bidang_usaha; ?>" <?php echo $selected; ?>>

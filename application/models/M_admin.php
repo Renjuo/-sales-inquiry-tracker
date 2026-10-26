@@ -3,27 +3,27 @@
 class M_admin extends CI_Model{
 
 	function tampil_data($kode_web){
-        // Mengambil semua kolom dari tsurat dan hanya nama_bidang_usaha dari tbidang_usaha
-        $this->db->select('tsurat.*, tbidang_usaha.nama_bidang_usaha');
-        $this->db->from('tsurat');
+        // Mengambil semua kolom dari your_table dan hanya nama_bidang_usaha dari your_table
+        $this->db->select('your_table.*, your_table.nama_bidang_usaha');
+        $this->db->from('your_table');
         
         // Melakukan LEFT JOIN berdasarkan ID bidang usaha
-        $this->db->join('tbidang_usaha', 'tbidang_usaha.id_bidang_usaha = tsurat.bidang_usaha', 'left');
+        $this->db->join('your_table', 'your_table.id_bidang_usaha = your_table.bidang_usaha', 'left');
 
         // Business Development bertugas mengecek semua data, sama seperti admin
         if ($_SESSION['level'] == "admin" || $_SESSION['level'] == "business development") {
             $year = date("y");
-            $this->db->where('tsurat.kode_website', "$kode_web"); // Ditambahkan prefix tabel agar tidak ambigu
-            $this->db->like('tsurat.bulan', "$year");
-            $this->db->order_by('tsurat.nomor_urut', 'desc');
+            $this->db->where('your_table.kode_website', "$kode_web"); // Ditambahkan prefix tabel agar tidak ambigu
+            $this->db->like('your_table.bulan', "$year");
+            $this->db->order_by('your_table.nomor_urut', 'desc');
             return $this->db->get();
         }
         else {
             $year = date("y");
-            $this->db->where('tsurat.kode_website', "$kode_web");
-            $this->db->where('tsurat.pic', $_SESSION['username']);
-            $this->db->like('tsurat.bulan', "$year");
-            $this->db->order_by('tsurat.nomor_urut', 'desc');
+            $this->db->where('your_table.kode_website', "$kode_web");
+            $this->db->where('your_table.pic', $_SESSION['username']);
+            $this->db->like('your_table.bulan', "$year");
+            $this->db->order_by('your_table.nomor_urut', 'desc');
             return $this->db->get();
         }
     }
@@ -33,13 +33,13 @@ class M_admin extends CI_Model{
 			$year = date("y");
 			$this->db->where('bulan !=',"$year");
 			$this->db->order_by('nomor_urut','desc');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 		//}
 		/**else{
 			$this->db->where('pic',"$_SESSION[username]");
 			$this->db->order_by('nomor_urut','desc');
 			$this->db->limit('1000');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 		}*/
 		
 		
@@ -51,13 +51,13 @@ class M_admin extends CI_Model{
 			$this->db->where('kode_website',"$kode_web");
 			$this->db->where('RIGHT(bulan, 2) =', $tahun);
 			$this->db->order_by('nomor_urut','desc');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 		//}
 		/**else{
 			$this->db->where('pic',"$_SESSION[username]");
 			$this->db->order_by('nomor_urut','desc');
 			$this->db->limit('1000');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 		}*/
 		
 		
@@ -66,48 +66,48 @@ class M_admin extends CI_Model{
 	function tampil_data_analytic(){
 			$this->db->order_by('nomor_urut','desc');
 			$this->db->limit('1000');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 	}
 	
 	function tampil_data_2(){
 		if ($_SESSION['username'] == "admin") {
 			$this->db->order_by('id_surat','desc');
 			$this->db->limit('1000');
-			return $this->db->get('tsurat_2');
+			return $this->db->get('your_table');
 		}
 		else{
 			$this->db->where('pic',"$_SESSION[username]");
 			$this->db->order_by('id_surat','desc');
 			$this->db->limit('1000');
-			return $this->db->get('tsurat_2');
+			return $this->db->get('your_table');
 		}
 		
 		
 	}
     
     function tampil_data_website(){
-		return $this->db->get('tsurat_website');
+		return $this->db->get('your_table');
 	}
     
 	function tampil_data_tsurat(){
 		$this->db->order_by('nomor_urut','desc');
 		$this->db->limit('1');
-		return $this->db->get('tsurat');
-		$result = $tsurat->result();
+		return $this->db->get('your_table');
+		$result = $your_table->result();
 	}
 	function tampil_data_tsurat_2(){
 		$this->db->order_by('id_surat','desc');
 		$this->db->limit('1');
-		return $this->db->get('tsurat_2');
-		$result = $tsurat_2->result();
+		return $this->db->get('your_table');
+		$result = $your_table->result();
 	}
 
 	function tampil_data_tjenis(){
-		return $this->db->get('tjenis');
+		return $this->db->get('your_table');
 	}
 
 	function tampil_data_twebsite(){
-		return $this->db->get('twebsite');
+		return $this->db->get('your_table');
 	}
 
 	function cek_data($table, $where){
@@ -145,13 +145,13 @@ class M_admin extends CI_Model{
 		if ($_SESSION['username'] == "admin") {
 			$this->db->where('status','sudah po');
 			$this->db->order_by('nomor_urut','desc');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 		}
 		else{
 			$this->db->where('pic',"$_SESSION[username]");
 			$this->db->where('status','sudah po');
 			$this->db->order_by('nomor_urut','desc');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 		}
 	}
 
@@ -159,13 +159,13 @@ class M_admin extends CI_Model{
 		if ($_SESSION['username'] == "admin") {
 			$this->db->where('status','sudah quote');
 			$this->db->order_by('nomor_urut','desc');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 		}
 		else{
 			$this->db->where('pic',"$_SESSION[username]");
 			$this->db->where('status','sudah quote');
 			$this->db->order_by('nomor_urut','desc');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 		}
 	}
 
@@ -173,13 +173,13 @@ class M_admin extends CI_Model{
 		if ($_SESSION['username'] == "admin") {
 			$this->db->where('status','belum quote');
 			$this->db->order_by('nomor_urut','desc');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 		}
 		else{
 			$this->db->where('pic',"$_SESSION[username]");
 			$this->db->where('status','belum quote');
 			$this->db->order_by('nomor_urut','desc');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 		}
 	}
 
@@ -187,13 +187,13 @@ class M_admin extends CI_Model{
 		if ($_SESSION['username'] == "admin") {
 			$this->db->where('status','close/gagal');
 			$this->db->order_by('nomor_urut','desc');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 		}
 		else{
 			$this->db->where('pic',"$_SESSION[username]");
 			$this->db->where('status','close/gagal');
 			$this->db->order_by('nomor_urut','desc');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 		}
 	}
 
@@ -202,14 +202,14 @@ class M_admin extends CI_Model{
 			$a = $this->input->post('dat');
 			$b = $this->input->post('dat2');
 			$this->db->where('tanggal_input BETWEEN "'. date('Y-m-d', strtotime($a)). '" and "'. date('Y-m-d', strtotime($b)).'"');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 		}
 		else{
 			$a = $this->input->post('dat');
 			$b = $this->input->post('dat2');
 			$this->db->where('pic',"$_SESSION[username]");
 			$this->db->where('tanggal_input BETWEEN "'. date('Y-m-d', strtotime($a)). '" and "'. date('Y-m-d', strtotime($b)).'"');
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 		}
 	}
 
@@ -220,7 +220,7 @@ class M_admin extends CI_Model{
 			$d = $this->input->post('pics'); 
 			$this->db->where('tanggal_input BETWEEN "'. date('Y-m-d', strtotime($a)). '" and "'. date('Y-m-d', strtotime($b)).'"');
 			$this->db->where('pic',$this->input->post('pics'));
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 	    
 	    }
 	    else{
@@ -231,7 +231,7 @@ class M_admin extends CI_Model{
 			$this->db->where('tanggal_input BETWEEN "'. date('Y-m-d', strtotime($a)). '" and "'. date('Y-m-d', strtotime($b)).'"');
 			$this->db->where('progress_status', $this->input->post('prog_stat'));
 			$this->db->where('pic',$this->input->post('pics'));
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 	    }
 	}
 
@@ -264,16 +264,16 @@ class M_admin extends CI_Model{
         $this->db->where("tanggal_input BETWEEN '$date_from' AND '$date_to'");
     }
 
-    // Eksekusi query ke tabel tsurat
-    return $this->db->get('tsurat');
+    // Eksekusi query ke tabel your_table
+    return $this->db->get('your_table');
 }
 	
 	function tampil_data_report_graph(){
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 	}
 	
 	function tampil_data_report_sales(){
-			return $this->db->get('tsurat');
+			return $this->db->get('your_table');
 	}
 
 	

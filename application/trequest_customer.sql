@@ -1,6 +1,6 @@
 -- Request dari form customer eksternal (htdocs/form_customer).
--- Nama kolom sama dengan tsurat supaya bisa langsung diisikan ke form Tambah Data.
-CREATE TABLE IF NOT EXISTS `trequest_customer` (
+-- Nama kolom sama dengan your_table supaya bisa langsung diisikan ke form Tambah Data.
+CREATE TABLE IF NOT EXISTS `your_table` (
   `id_request` int(11) NOT NULL AUTO_INCREMENT,
   `kebutuhan_klien` text NOT NULL,
   `kategori` varchar(255) NOT NULL DEFAULT '',

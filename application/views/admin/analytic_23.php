@@ -89,73 +89,73 @@ include 'header.php';
             <tr>
                 <td>1</td>
                 <td>Jumlah Inquiry</td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and pic = 'faoji'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and pic = 'hanifan'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and pic = 'ridwan'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and pic = 'redha'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and pic = 'andis'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and pic = 'Bayu'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and pic = 'yovan'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and pic = 'Rafael'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and pic = 'Alfian'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and pic = 'Reza'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and pic = 'anto'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and pic = 'zulfikri'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and pic = 'faoji'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and pic = 'hanifan'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and pic = 'ridwan'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and pic = 'redha'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and pic = 'andis'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and pic = 'Bayu'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and pic = 'yovan'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and pic = 'Rafael'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and pic = 'Alfian'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and pic = 'Reza'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and pic = 'anto'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and pic = 'zulfikri'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year'")->num_rows();?></td>
             </tr>
 
             <tr>
                 <td>2</td>
                 <td>Belum Quote</td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'faoji'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'hanifan'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'ridwan'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'redha'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'andis'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'Bayu'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'yovan'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'rafael'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'alfian'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'reza'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'anto'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'zulfikri'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Belum Quote'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'faoji'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'hanifan'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'ridwan'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'redha'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'andis'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'Bayu'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'yovan'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'rafael'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'alfian'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'reza'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'anto'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Belum Quote'  and pic = 'zulfikri'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Belum Quote'")->num_rows();?></td>
             </tr>
 
             <tr>
                 <td>3</td>
                 <td>Sudah Quote</td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'faoji'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'hanifan'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'ridwan'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'redha'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'andis'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'Bayu'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'yovan'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'rafael'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'alfian'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'reza'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'anto'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'zulfikri'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah Quote'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'faoji'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'hanifan'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'ridwan'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'redha'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'andis'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'Bayu'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'yovan'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'rafael'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'alfian'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'reza'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'anto'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah Quote'  and pic = 'zulfikri'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah Quote'")->num_rows();?></td>
             </tr>
 
             <tr>
                 <td>4</td>
                 <td>Jumlah PO</td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'faoji'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'hanifan'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'ridwan'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'redha'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'andis'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'Bayu'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'yovan'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'rafael'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'alfian'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'reza'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'anto'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'zulfikri'")->num_rows();?></td>
-                <td><?php echo $this->db->query("SELECT * FROM tsurat where bulan = '$x$year' and status = 'Sudah PO'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'faoji'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'hanifan'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'ridwan'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'redha'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'andis'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'Bayu'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'yovan'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'rafael'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'alfian'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'reza'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'anto'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah PO'  and pic = 'zulfikri'")->num_rows();?></td>
+                <td><?php echo $this->db->query("SELECT * FROM your_table where bulan = '$x$year' and status = 'Sudah PO'")->num_rows();?></td>
             </tr>
         </tbody>
     </table>
@@ -211,18 +211,18 @@ include 'footer.php';
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ['Bulan', 'Tim A', 'Tim B'],
-          ['Januari', <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0123' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0123' and team = 'B'")->num_rows();?>],
-          ['Februari', <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0223' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0223' and team = 'B'")->num_rows();?>],
-          ['Maret', <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0323' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0323' and team = 'B'")->num_rows();?>],
-          ['April', <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0423' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0423' and team = 'B'")->num_rows();?>],
-          ['Mei', <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0523' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0523' and team = 'B'")->num_rows();?>],
-          ['Juni', <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0623' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0623' and team = 'B'")->num_rows();?>],
-          ['Juli', <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0723' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0723' and team = 'B'")->num_rows();?>],
-          ['Agustus', <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0823' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0823' and team = 'B'")->num_rows();?>],
-          ['September', <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0923' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '0923' and team = 'B'")->num_rows();?>],
-          ['Oktober', <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '1023' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '1023' and team = 'B'")->num_rows();?>],
-          ['November', <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '1123' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '1123' and team = 'B'")->num_rows();?>],
-          ['Desember', <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '1223' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM tsurat where bulan = '1223' and team = 'B'")->num_rows();?>]
+          ['Januari', <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0123' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0123' and team = 'B'")->num_rows();?>],
+          ['Februari', <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0223' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0223' and team = 'B'")->num_rows();?>],
+          ['Maret', <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0323' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0323' and team = 'B'")->num_rows();?>],
+          ['April', <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0423' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0423' and team = 'B'")->num_rows();?>],
+          ['Mei', <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0523' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0523' and team = 'B'")->num_rows();?>],
+          ['Juni', <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0623' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0623' and team = 'B'")->num_rows();?>],
+          ['Juli', <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0723' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0723' and team = 'B'")->num_rows();?>],
+          ['Agustus', <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0823' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0823' and team = 'B'")->num_rows();?>],
+          ['September', <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0923' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM your_table where bulan = '0923' and team = 'B'")->num_rows();?>],
+          ['Oktober', <?php echo $this->db->query("SELECT * FROM your_table where bulan = '1023' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM your_table where bulan = '1023' and team = 'B'")->num_rows();?>],
+          ['November', <?php echo $this->db->query("SELECT * FROM your_table where bulan = '1123' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM your_table where bulan = '1123' and team = 'B'")->num_rows();?>],
+          ['Desember', <?php echo $this->db->query("SELECT * FROM your_table where bulan = '1223' and team = 'A'")->num_rows();?>, <?php echo $this->db->query("SELECT * FROM your_table where bulan = '1223' and team = 'B'")->num_rows();?>]
         ]);
 
         var options = {
@@ -246,18 +246,18 @@ include 'footer.php';
         <?php $tanggal = date('Y-m-d') ?>
         var data = google.visualization.arrayToDataTable([
           ['Sales', 'Jumlah Inquiry Harian'],
-          ['Anto', <?php echo $this->db->query("SELECT * FROM tsurat where tanggal_input = '$tanggal' and pic = 'Anto'")->num_rows();?>],
-          ['Faoji', <?php echo $this->db->query("SELECT * FROM tsurat where tanggal_input = '$tanggal' and pic = 'Faoji'")->num_rows();?>],
-          ['Hanifan', <?php echo $this->db->query("SELECT * FROM tsurat where tanggal_input = '$tanggal' and pic = 'Hanifan'")->num_rows();?>],
-          ['Ridwan', <?php echo $this->db->query("SELECT * FROM tsurat where tanggal_input = '$tanggal' and pic = 'Ridwan'")->num_rows();?>],
-          ['Redha', <?php echo $this->db->query("SELECT * FROM tsurat where tanggal_input = '$tanggal' and pic = 'Redha'")->num_rows();?>],
-          ['Zulfikri', <?php echo $this->db->query("SELECT * FROM tsurat where tanggal_input = '$tanggal' and pic = 'Zulfikri'")->num_rows();?>],
-          ['Andis', <?php echo $this->db->query("SELECT * FROM tsurat where tanggal_input = '$tanggal' and pic = 'Andis'")->num_rows();?>],
-          ['Bayu', <?php echo $this->db->query("SELECT * FROM tsurat where tanggal_input = '$tanggal' and pic = 'Bayu'")->num_rows();?>],
-          ['Yovan', <?php echo $this->db->query("SELECT * FROM tsurat where tanggal_input = '$tanggal' and pic = 'Yovan'")->num_rows();?>],
-          ['Rafael', <?php echo $this->db->query("SELECT * FROM tsurat where tanggal_input = '$tanggal' and pic = 'Rafael'")->num_rows();?>],
-          ['Alfian', <?php echo $this->db->query("SELECT * FROM tsurat where tanggal_input = '$tanggal' and pic = 'Alfian'")->num_rows();?>],
-          ['Reza', <?php echo $this->db->query("SELECT * FROM tsurat where tanggal_input = '$tanggal' and pic = 'Reza'")->num_rows();?>]
+          ['Anto', <?php echo $this->db->query("SELECT * FROM your_table where tanggal_input = '$tanggal' and pic = 'Anto'")->num_rows();?>],
+          ['Faoji', <?php echo $this->db->query("SELECT * FROM your_table where tanggal_input = '$tanggal' and pic = 'Faoji'")->num_rows();?>],
+          ['Hanifan', <?php echo $this->db->query("SELECT * FROM your_table where tanggal_input = '$tanggal' and pic = 'Hanifan'")->num_rows();?>],
+          ['Ridwan', <?php echo $this->db->query("SELECT * FROM your_table where tanggal_input = '$tanggal' and pic = 'Ridwan'")->num_rows();?>],
+          ['Redha', <?php echo $this->db->query("SELECT * FROM your_table where tanggal_input = '$tanggal' and pic = 'Redha'")->num_rows();?>],
+          ['Zulfikri', <?php echo $this->db->query("SELECT * FROM your_table where tanggal_input = '$tanggal' and pic = 'Zulfikri'")->num_rows();?>],
+          ['Andis', <?php echo $this->db->query("SELECT * FROM your_table where tanggal_input = '$tanggal' and pic = 'Andis'")->num_rows();?>],
+          ['Bayu', <?php echo $this->db->query("SELECT * FROM your_table where tanggal_input = '$tanggal' and pic = 'Bayu'")->num_rows();?>],
+          ['Yovan', <?php echo $this->db->query("SELECT * FROM your_table where tanggal_input = '$tanggal' and pic = 'Yovan'")->num_rows();?>],
+          ['Rafael', <?php echo $this->db->query("SELECT * FROM your_table where tanggal_input = '$tanggal' and pic = 'Rafael'")->num_rows();?>],
+          ['Alfian', <?php echo $this->db->query("SELECT * FROM your_table where tanggal_input = '$tanggal' and pic = 'Alfian'")->num_rows();?>],
+          ['Reza', <?php echo $this->db->query("SELECT * FROM your_table where tanggal_input = '$tanggal' and pic = 'Reza'")->num_rows();?>]
         ]);
 
         var options = {

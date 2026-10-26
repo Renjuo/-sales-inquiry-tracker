@@ -98,7 +98,7 @@ $pesan_berhasil = $this->session->userdata('berhasil'); if ($pesan_berhasil) { $
     // Ambil level user sekali saja (fallback ke database jika session belum berisi level)
     $level = isset($_SESSION['level']) ? $_SESSION['level'] : '';
     if ($level === '') {
-        $row_user = $this->db->get_where('tuser', array('username' => $_SESSION['username']))->row();
+        $row_user = $this->db->get_where('your_table', array('username' => $_SESSION['username']))->row();
         $level = $row_user ? $row_user->level : '';
     }
     $is_admin = ($level == 'admin');

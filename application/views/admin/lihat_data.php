@@ -7,7 +7,7 @@ include 'header.php';
   </div>
   <div class="card-body">
     <!-- Credit Card -->
-    <?php foreach($tsurat as $u){ ?>
+    <?php foreach($your_table as $u){ ?>
     <div id="pay-invoice">
       <div class="card-body">
         <div class="card-title">

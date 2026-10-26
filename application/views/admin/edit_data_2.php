@@ -7,7 +7,7 @@ include 'header.php';
   </div>
   <div class="card-body">
     <!-- Credit Card -->
-    <?php foreach($tsurat as $u){ ?>
+    <?php foreach($your_table as $u){ ?>
     <div id="pay-invoice">
       <div class="card-body">
         <div class="card-title">
@@ -21,7 +21,7 @@ include 'header.php';
               <label for="select" class=" form-control-label">Jenis Dokumen</label>
               <!--<select name="kode_jenis" id="kode_jenis" class="form-control" onchange="jenis(kode_jenis)" required="">-->
               <!--?php
-              //foreach ($tjenis as $u) 
+              //foreach ($your_table as $u) 
                 ?>-->
               <!--  <option value="?php echo $u->kode_jenis ?>">?php echo $u->keterangan_jenis ?></option>-->
               <!-- ?php } ?>-->
@@ -39,7 +39,7 @@ include 'header.php';
               <label for="select" class=" form-control-label">Web Terkait</label>
               <!--<select name="kode_website" id="kode_website" class="form-control" onchange="website(kode_website)" required="">-->
               <!-- ?php>
-              //  foreach ($twebsite as $u) {-->
+              //  foreach ($your_table as $u) {-->
               <!--  ?>-->
               <!--  <option value="?php echo $u->kode_website ?>">?php echo $u->keterangan_website ?></option>-->
               <!--?php } ?>-->
@@ -54,7 +54,7 @@ include 'header.php';
               <label class=" form-control-label"></label><input type="text" id="kode_website_2" name="kode_website_2" class="form-control" readonly=""  value="<?php echo $u->kode_website ?>">
             </div>
             <?php
-                foreach ($tsurat as $u) {
+                foreach ($your_table as $u) {
                     $aw = "000";
                     $a = $u->nomor_urut;
                     if($a > "999"){

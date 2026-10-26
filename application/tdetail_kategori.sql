@@ -2,7 +2,7 @@
 -- kolom "Nama Alat / Produk / Layanan", kategori Data Logger s/d Weather & Environment).
 -- Jalankan di database BeforePO (phpMyAdmin > tab SQL).
 
-CREATE TABLE IF NOT EXISTS `tdetail_kategori` (
+CREATE TABLE IF NOT EXISTS `your_table` (
   `id_detail` int(11) NOT NULL AUTO_INCREMENT,
   `kategori` varchar(255) NOT NULL,
   `nama_detail` varchar(255) NOT NULL,
@@ -11,10 +11,10 @@ CREATE TABLE IF NOT EXISTS `tdetail_kategori` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Kolom penyimpan pilihan detail pada data inquiry
-ALTER TABLE `tsurat` ADD COLUMN `detail_kategori` varchar(255) NOT NULL DEFAULT '' AFTER `kategori`;
+ALTER TABLE `your_table` ADD COLUMN `detail_kategori` varchar(255) NOT NULL DEFAULT '' AFTER `kategori`;
 
 -- Data Logger (26)
-INSERT INTO `tdetail_kategori` (`kategori`, `nama_detail`) VALUES
+INSERT INTO `your_table` (`kategori`, `nama_detail`) VALUES
   ('Data Logger', 'Temperature Data Logger'),
   ('Data Logger', 'Humidity Data Logger'),
   ('Data Logger', 'Temperature & Humidity Data Logger'),
@@ -43,7 +43,7 @@ INSERT INTO `tdetail_kategori` (`kategori`, `nama_detail`) VALUES
   ('Data Logger', 'Multi-Parameter Data Logger');
 
 -- Sensor (60)
-INSERT INTO `tdetail_kategori` (`kategori`, `nama_detail`) VALUES
+INSERT INTO `your_table` (`kategori`, `nama_detail`) VALUES
   ('Sensor', 'Accelerometer AC Standar (Top / Side Entry)'),
   ('Sensor', 'Accelerometer AC Premium'),
   ('Sensor', 'Accelerometer Compact / Mini'),
@@ -106,7 +106,7 @@ INSERT INTO `tdetail_kategori` (`kategori`, `nama_detail`) VALUES
   ('Sensor', 'Wireless Sensor Node & Gateway');
 
 -- NDT Instrument (30)
-INSERT INTO `tdetail_kategori` (`kategori`, `nama_detail`) VALUES
+INSERT INTO `your_table` (`kategori`, `nama_detail`) VALUES
   ('NDT Instrument', 'Ultrasonic Pulse Velocity Test (UPV)'),
   ('NDT Instrument', 'Ultrasonic Concrete Tomograph 3D'),
   ('NDT Instrument', 'Hammer Test (Schmidt Concrete Rebound Hammer)'),
@@ -139,7 +139,7 @@ INSERT INTO `tdetail_kategori` (`kategori`, `nama_detail`) VALUES
   ('NDT Instrument', 'Stress Wave Timer / Sonic Tomograph');
 
 -- Geoteknik Instrument (55)
-INSERT INTO `tdetail_kategori` (`kategori`, `nama_detail`) VALUES
+INSERT INTO `your_table` (`kategori`, `nama_detail`) VALUES
   ('Geoteknik Instrument', 'Digital MEMS Inclinometer System (Portable)'),
   ('Geoteknik Instrument', 'MEMS Digital In-Place Inclinometer (Vertikal)'),
   ('Geoteknik Instrument', 'Digital Horizontal Inclinometer System'),
@@ -197,7 +197,7 @@ INSERT INTO `tdetail_kategori` (`kategori`, `nama_detail`) VALUES
   ('Geoteknik Instrument', 'Open Channel Flow Meter');
 
 -- Soil Instrument (17)
-INSERT INTO `tdetail_kategori` (`kategori`, `nama_detail`) VALUES
+INSERT INTO `your_table` (`kategori`, `nama_detail`) VALUES
   ('Soil Instrument', 'Dynamic Cone Penetrometer (DCP)'),
   ('Soil Instrument', 'Hand Auger Soil Sampler Kit'),
   ('Soil Instrument', 'Sand Cone Test Apparatus'),
@@ -217,7 +217,7 @@ INSERT INTO `tdetail_kategori` (`kategori`, `nama_detail`) VALUES
   ('Soil Instrument', 'Soil Resistivity Meter');
 
 -- Testing Machine (26)
-INSERT INTO `tdetail_kategori` (`kategori`, `nama_detail`) VALUES
+INSERT INTO `your_table` (`kategori`, `nama_detail`) VALUES
   ('Testing Machine', 'Electromechanical Universal Testing Machine (UTM)'),
   ('Testing Machine', 'Servo-Hydraulic Universal Testing Machine'),
   ('Testing Machine', 'Concrete Compression Testing Machine'),
@@ -246,7 +246,7 @@ INSERT INTO `tdetail_kategori` (`kategori`, `nama_detail`) VALUES
   ('Testing Machine', 'Electrodynamic Vibration Shaker');
 
 -- Weather, Hydrology & Eviromental Instrument (22)
-INSERT INTO `tdetail_kategori` (`kategori`, `nama_detail`) VALUES
+INSERT INTO `your_table` (`kategori`, `nama_detail`) VALUES
   ('Weather, Hydrology & Eviromental Instrument', 'Continuous Ambient Air Quality Monitoring (AQMS)'),
   ('Weather, Hydrology & Eviromental Instrument', 'Continuous Emission Monitoring System (CEMS)'),
   ('Weather, Hydrology & Eviromental Instrument', 'Portable Flue Gas & Multi-Gas Analyzer'),

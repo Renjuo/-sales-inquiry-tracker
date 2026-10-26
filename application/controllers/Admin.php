@@ -33,7 +33,7 @@ class Admin extends CI_Controller {
         // Urutkan berdasarkan tanggal terbaru
         $this->db->order_by('tanggal_update', 'DESC');
     
-        $data['data_quote'] = $this->db->get('tsurat')->result();
+        $data['data_quote'] = $this->db->get('your_table')->result();
     
         // Load view display
         $this->load->view('admin/display_dashboard', $data);
@@ -73,8 +73,8 @@ class Admin extends CI_Controller {
     public function transfer_data($id){
         $where = array('nomor_urut' => $id);
         
-        $row = $this->db->order_by('nomor_urut', 'desc')->limit(1)->get('tsurat')->row_array();
-        $row_conn = $this->db->get_where('tsurat_website', $where)->row_array();
+        $row = $this->db->order_by('nomor_urut', 'desc')->limit(1)->get('your_table')->row_array();
+        $row_conn = $this->db->get_where('your_table', $where)->row_array();
         
       	
         $kode_jenis = "INQ";
@@ -149,23 +149,23 @@ class Admin extends CI_Controller {
 			'tanggal_quotation' => $tanggal_quotation
 			);
 	 
-		$this->M_admin->masukan_data($data,'tsurat');
+		$this->M_admin->masukan_data($data,'your_table');
 		redirect('data-testindo');   
     }
     
 	public function tambah(){
-		$data['tsurat'] = $this->M_admin->tampil_data_tsurat_2()->result();
-		$data['tjenis'] = $this->M_admin->tampil_data_tjenis()->result();
-		$data['twebsite'] = $this->M_admin->tampil_data_twebsite()->result();
-		$data['tbidang_usaha'] = $this->db->get('tbidang_usaha')->result();
-		// Pilihan Detail Kategori per kategori (kosong bila tabel tdetail_kategori belum dibuat)
+		$data['your_table'] = $this->M_admin->tampil_data_tsurat_2()->result();
+		$data['your_table'] = $this->M_admin->tampil_data_tjenis()->result();
+		$data['your_table'] = $this->M_admin->tampil_data_twebsite()->result();
+		$data['your_table'] = $this->db->get('your_table')->result();
+		// Pilihan Detail Kategori per kategori (kosong bila tabel your_table belum dibuat)
 		$data['detail_kategori'] = array();
-		if ($this->db->table_exists('tdetail_kategori')) {
-			foreach ($this->db->order_by('id_detail')->get('tdetail_kategori')->result() as $d) $data['detail_kategori'][$d->kategori][] = $d->nama_detail;
+		if ($this->db->table_exists('your_table')) {
+			foreach ($this->db->order_by('id_detail')->get('your_table')->result() as $d) $data['detail_kategori'][$d->kategori][] = $d->nama_detail;
 		}
 		// Dibuka dari menu Request Customer: isian customer dipakai sebagai nilai awal form
 		$id_request = (int) $this->input->get('request');
-		$data['request'] = ($id_request && $this->_boleh_request()) ? $this->db->get_where('trequest_customer', array('id_request' => $id_request))->row_array() : NULL;
+		$data['request'] = ($id_request && $this->_boleh_request()) ? $this->db->get_where('your_table', array('id_request' => $id_request))->row_array() : NULL;
 
 		$json_path = FCPATH . 'vendors/wilayah_indonesia.json';
     
@@ -191,12 +191,12 @@ class Admin extends CI_Controller {
 			->where("TRIM(nama_perusahaan_klien) <> ''");
 		if ($q !== '') $this->db->like('nama_perusahaan_klien', $q);
 		$nama = array_column($this->db->group_by('LOWER(TRIM(nama_perusahaan_klien))', FALSE)
-			->order_by('terakhir', 'DESC')->limit(5)->get('tsurat')->result_array(), 'nama');
+			->order_by('terakhir', 'DESC')->limit(5)->get('your_table')->result_array(), 'nama');
 		if (!$nama) { header('Content-Type: application/json'); echo '[]'; return; }
 
 		// 2. Semua data perusahaan tsb, terbaru dulu
 		$in = implode(',', array_map(array($this->db, 'escape'), $nama));
-		$rows = $this->db->where("TRIM(nama_perusahaan_klien) IN ($in)", NULL, FALSE)->order_by('tanggal_input', 'DESC')->get('tsurat')->result_array();
+		$rows = $this->db->where("TRIM(nama_perusahaan_klien) IN ($in)", NULL, FALSE)->order_by('tanggal_input', 'DESC')->get('your_table')->result_array();
 
 		$grup = array(
 			array('bidang_usaha'),
@@ -317,24 +317,24 @@ class Admin extends CI_Controller {
             'provinsi'      => $provinsi,
             'kab_kota'      => $kab_kota
 			);
-		// Detail Kategori disimpan bila kolomnya sudah ditambahkan ke tsurat (application/tdetail_kategori.sql)
-		if ($this->db->field_exists('detail_kategori', 'tsurat')) $data['detail_kategori'] = (string) $this->input->post('detail_kategori');
-		$this->M_admin->masukan_data($data,'tsurat');
-		// Berasal dari Request Customer: sudah tersimpan di tsurat, hapus dari trequest_customer
+		// Detail Kategori disimpan bila kolomnya sudah ditambahkan ke your_table (application/your_table.sql)
+		if ($this->db->field_exists('detail_kategori', 'your_table')) $data['detail_kategori'] = (string) $this->input->post('detail_kategori');
+		$this->M_admin->masukan_data($data,'your_table');
+		// Berasal dari Request Customer: sudah tersimpan di your_table, hapus dari your_table
 		if (($id_request = (int) $this->input->post('id_request')) && $this->_boleh_request()) {
-			$this->db->delete('trequest_customer', array('id_request' => $id_request));
+			$this->db->delete('your_table', array('id_request' => $id_request));
 		}
 		// Ditampilkan sekali di halaman berikutnya (header.php), di posisi loader, hilang sendiri setelah 2 detik
 		$this->session->set_userdata('berhasil', 'Data berhasil ditambah');
 		redirect('data-testindo');
 	}
 
-	// Request Customer untuk admin & Business Development (level dari session; fallback ke tuser seperti di header.php)
+	// Request Customer untuk admin & Business Development (level dari session; fallback ke your_table seperti di header.php)
 	private function _level(){
 		if (!isset($_SESSION['username'])) return '';
 		$level = isset($_SESSION['level']) ? $_SESSION['level'] : '';
 		if ($level === '') {
-			$row = $this->db->get_where('tuser', array('username' => $_SESSION['username']))->row();
+			$row = $this->db->get_where('your_table', array('username' => $_SESSION['username']))->row();
 			$level = $row ? $row->level : '';
 		}
 		return $level;
@@ -350,7 +350,7 @@ class Admin extends CI_Controller {
 		return in_array($this->_level(), array('admin', 'business development'), TRUE);
 	}
 
-	// Kolom tsurat yang mencatat kapan level ini terakhir membaca chat (ceklis 2 biru); NULL = tidak ikut chat (admin)
+	// Kolom your_table yang mencatat kapan level ini terakhir membaca chat (ceklis 2 biru); NULL = tidak ikut chat (admin)
 	private function _kolom_baca(){
 		$kolom = array('sales' => 'sales_last_read_at', 'business development' => 'bd_last_read_at');
 		$level = $this->_level();
@@ -368,17 +368,17 @@ class Admin extends CI_Controller {
 
 	// Kolom Sales (pic) berisi username atau nama lengkap sales, mis. "Alfin Rusdi" untuk username alfin
 	private function _nama_saya(){
-		$row = $this->db->select('nama_lengkap')->get_where('tuser', array('username' => $_SESSION['username']))->row();
+		$row = $this->db->select('nama_lengkap')->get_where('your_table', array('username' => $_SESSION['username']))->row();
 		return array_values(array_filter(array($_SESSION['username'], $row ? $row->nama_lengkap : '')));
 	}
 
 	// Baris data yang boleh dibuka chat-nya: semua data untuk admin & Business Development, sales hanya data miliknya (pic)
 	private function _data_chat($nomor_surat){
 		if (!isset($_SESSION['username']) || $nomor_surat === '') return NULL;
-		$nama = $this->_lihat_semua_chat() ? NULL : $this->_nama_saya(); // diambil dulu, sebelum query tsurat disusun
+		$nama = $this->_lihat_semua_chat() ? NULL : $this->_nama_saya(); // diambil dulu, sebelum query your_table disusun
 		$this->db->select('nomor_surat, sales_last_read_at, bd_last_read_at')->where('nomor_surat', $nomor_surat);
 		if ($nama) $this->db->where_in('pic', $nama);
-		return $this->db->get('tsurat')->row();
+		return $this->db->get('your_table')->row();
 	}
 
 	// GET: isi chat satu baris (baca=1: ditandai dibaca). POST pesan: kirim pesan lalu kembalikan isi chat.
@@ -390,19 +390,19 @@ class Admin extends CI_Controller {
 		$kolom = $this->_kolom_baca(); // NULL untuk admin: hanya baca
 		$pesan = trim((string) $this->input->post('pesan')); // tanpa xss_clean: ditampilkan sebagai teks (.text()) di browser
 		if ($pesan !== '' && $kolom) {
-			$this->db->insert('tchat', array('nomor_surat' => $no, 'username' => $saya, 'level' => $this->_level(),
+			$this->db->insert('your_table', array('nomor_surat' => $no, 'username' => $saya, 'level' => $this->_level(),
 				'pesan' => mb_substr($pesan, 0, 2000), 'waktu' => $this->_sekarang()));
 		}
 		// Warna bubble diambil dari profil pengirim saat ini: ganti warna ikut mengubah riwayat, terlihat semua user
 		$data = $this->db->select('c.id_chat, c.username, c.level, c.pesan, c.waktu, u.warna_chat AS warna')
-			->join('tuser u', 'u.username = c.username', 'left')
-			->where('c.nomor_surat', $no)->order_by('c.id_chat')->get('tchat c')->result();
+			->join('your_table u', 'u.username = c.username', 'left')
+			->where('c.nomor_surat', $no)->order_by('c.id_chat')->get('your_table c')->result();
 
 		// Ditandai dibaca hanya oleh sales / Business Development, saat kirim pesan atau jendela chat sedang aktif (baca=1).
-		// Ditulis hanya bila ada pesan lebih baru dari waktu baca terakhir, supaya polling tidak terus menulis ke tsurat.
+		// Ditulis hanya bila ada pesan lebih baru dari waktu baca terakhir, supaya polling tidak terus menulis ke your_table.
 		if ($kolom && $data && ($pesan !== '' || $this->input->get_post('baca')) && (string) $surat->$kolom < end($data)->waktu) {
 			$surat->$kolom = $this->_sekarang();
-			$this->db->update('tsurat', array($kolom => $surat->$kolom), array('nomor_surat' => $no));
+			$this->db->update('your_table', array($kolom => $surat->$kolom), array('nomor_surat' => $no));
 		}
 		foreach ($data as $c) {
 			$c->saya = strcasecmp($c->username, $saya) === 0; // pesan sendiri tampil di kanan
@@ -426,7 +426,7 @@ class Admin extends CI_Controller {
 			$batas = $bd ? "c.level = 'sales'"
 				: "c.level = 'business development' AND s.pic = " . $this->db->escape($_SESSION['username']); // sama dengan tabel sales (M_admin::tampil_data)
 			$baru  = $this->db->query("SELECT c.id_chat, c.nomor_surat, c.username, c.level, c.pesan, c.waktu, s.kode_website, s.nama_perusahaan_klien
-				FROM tchat c JOIN tsurat s ON s.nomor_surat = c.nomor_surat
+				FROM your_table c JOIN your_table s ON s.nomor_surat = c.nomor_surat
 				WHERE $batas AND (s.$kolom IS NULL OR c.waktu > s.$kolom)
 					AND s.bulan LIKE " . $this->db->escape('%' . date('y') . '%') . " -- sama dengan tabel (M_admin::tampil_data): hanya data tahun ini, supaya notifikasi bisa dibuka
 				ORDER BY c.id_chat DESC")->result();
@@ -444,13 +444,13 @@ class Admin extends CI_Controller {
 	public function request_customer(){
 		if (!$this->_boleh_request()) redirect('data-testindo');
 		// Hanya request yang belum dikonfirmasi; yang sudah dikonfirmasi/dihapus langsung dihapus dari tabel
-		$data['requests'] = $this->db->where('status', 'Baru')->order_by('id_request', 'DESC')->get('trequest_customer')->result();
+		$data['requests'] = $this->db->where('status', 'Baru')->order_by('id_request', 'DESC')->get('your_table')->result();
 		$this->load->view('admin/request_customer', $data);
 	}
 
 	public function hapus_request($id){
 		if (!$this->_boleh_request()) redirect('data-testindo');
-		$this->db->delete('trequest_customer', array('id_request' => (int) $id));
+		$this->db->delete('your_table', array('id_request' => (int) $id));
 		redirect('request-customer');
 	}
 
@@ -460,9 +460,9 @@ class Admin extends CI_Controller {
 		$baru = array('status' => 'Baru');
 		header('Content-Type: application/json');
 		echo json_encode(array(
-			'jumlah' => $this->db->where($baru)->count_all_results('trequest_customer'),
+			'jumlah' => $this->db->where($baru)->count_all_results('your_table'),
 			'data'   => $this->db->select('id_request, nama_perusahaan_klien, kategori, tanggal_request')->where($baru)
-				->order_by('id_request', 'DESC')->limit(5)->get('trequest_customer')->result(),
+				->order_by('id_request', 'DESC')->limit(5)->get('your_table')->result(),
 		), JSON_INVALID_UTF8_SUBSTITUTE);
 	}
 
@@ -472,12 +472,12 @@ class Admin extends CI_Controller {
 		if ($data['modal'] && !isset($_SESSION['username'])) { $this->output->set_status_header(401); return; }
 
 		$where = array('nomor_surat' => $id);
-		$data['tsurat'] = $this->M_admin->edit_data($where,'tsurat')->result();
+		$data['your_table'] = $this->M_admin->edit_data($where,'your_table')->result();
 		
 		// ====================================================================
 		// TAMBAHAN: Mengambil data Bidang Usaha dan JSON Wilayah Indonesia
 		// ====================================================================
-		$data['tbidang_usaha'] = $this->db->get('tbidang_usaha')->result();
+		$data['your_table'] = $this->db->get('your_table')->result();
 
 		// Membaca file JSON dari folder vendors
 		$json_path = FCPATH . 'vendors/wilayah_indonesia.json';
@@ -507,8 +507,8 @@ class Admin extends CI_Controller {
             return;
         }
     
-        // 4. Cek status inquiry saat ini di tabel 'tsurat'
-        $inquiry = $this->db->get_where('tsurat', ['nomor_surat' => $nomor_surat])->row();
+        // 4. Cek status inquiry saat ini di tabel 'your_table'
+        $inquiry = $this->db->get_where('your_table', ['nomor_surat' => $nomor_surat])->row();
     
         if (!$inquiry) {
             echo json_encode(['success' => false, 'message' => 'Data tidak ditemukan.']);
@@ -521,9 +521,9 @@ class Admin extends CI_Controller {
             return;
         }
     
-        // 6. Update data ke field 'prospect_category' di tabel 'tsurat'
+        // 6. Update data ke field 'prospect_category' di tabel 'your_table'
         $this->db->where('nomor_surat', $nomor_surat);
-        $update = $this->db->update('tsurat', ['prospect_category' => $priority_status]);
+        $update = $this->db->update('your_table', ['prospect_category' => $priority_status]);
     
         if ($update) {
             echo json_encode(['success' => true]);
@@ -549,7 +549,7 @@ class Admin extends CI_Controller {
     
                 // Eksekusi update ke database menggunakan model Anda
                 $this->db->where('nomor_surat', $nomor_surat);
-                $update = $this->db->update('tsurat', $data_update); 
+                $update = $this->db->update('your_table', $data_update); 
     
                 if ($update) {
                     echo json_encode(array('status' => 'success'));
@@ -663,13 +663,13 @@ class Admin extends CI_Controller {
 			'nomor_surat' => $nomor_surat
 		);
 	 
-		$this->M_admin->update_data($where,$data,'tsurat');
+		$this->M_admin->update_data($where,$data,'your_table');
 		if ($this->input->is_ajax_request()) return; // popup edit: halaman tabel memuat ulang dirinya sendiri
 		redirect('data-testindo');
 	}
     function edit_data_2($id){
 		$where = array('id_surat' => $id);
-		$data['tsurat'] = $this->M_admin->edit_data($where,'tsurat')->result();
+		$data['your_table'] = $this->M_admin->edit_data($where,'your_table')->result();
 		$this->load->view('admin/edit_data_2',$data);
 	}
 
@@ -746,7 +746,7 @@ class Admin extends CI_Controller {
 			'id_surat' => $id_surat
 		);
 	 
-		$this->M_admin->update_data($where,$data,'tsurat');
+		$this->M_admin->update_data($where,$data,'your_table');
 		redirect('data-testindo');
         }else{
         $data = array(
@@ -787,32 +787,32 @@ class Admin extends CI_Controller {
 			'id_surat' => $id_surat
 		);
 	 
-		$this->M_admin->update_data($where,$data,'tsurat');
+		$this->M_admin->update_data($where,$data,'your_table');
 		redirect('data-testindo');   
         }
 	}
     
     function hapus_data_2($id){
 		$where = array('id_surat' => $id);
-		$this->M_admin->hapus_data($where,'tsurat');
+		$this->M_admin->hapus_data($where,'your_table');
 		redirect('data-testindo');
 	}
     
 	function lihat_data($id){
 		$where = array('nomor_urut' => $id);
-		$data['tsurat'] = $this->M_admin->edit_data($where,'tsurat')->result();
+		$data['your_table'] = $this->M_admin->edit_data($where,'your_table')->result();
 		$this->load->view('admin/lihat_data',$data);
 	}
 
 	function hapus_data($id){
 		$where = array('nomor_urut' => $id);
-		$this->M_admin->hapus_data($where,'tsurat');
+		$this->M_admin->hapus_data($where,'your_table');
 		redirect('data-testindo');
 	}
 	
 	function hapus_data_website($id){
 		$where = array('nomor_urut' => $id);
-		$this->M_admin->hapus_data($where,'tsurat_website');
+		$this->M_admin->hapus_data($where,'your_table');
 		redirect('data-testindo');
 	}
 
@@ -825,7 +825,7 @@ class Admin extends CI_Controller {
 		if (!isset($_SESSION['username'])) redirect('login');
 		$warna = strtolower((string) $this->input->post('warna_chat'));
 		if (preg_match('/^#[0-9a-f]{6}$/', $warna)) { // pilihan WARNA_CHAT atau warna bebas dari lingkaran RGB
-			$this->db->update('tuser', array('warna_chat' => $warna === '#1e5bd6' ? NULL : $warna), array('username' => $_SESSION['username']));
+			$this->db->update('your_table', array('warna_chat' => $warna === '#1e5bd6' ? NULL : $warna), array('username' => $_SESSION['username']));
 			$this->session->set_flashdata('warna_ok', TRUE);
 		}
 		redirect('profil');
@@ -834,7 +834,7 @@ class Admin extends CI_Controller {
 	function count_data(){    
 		$month = date('y');
         $kode_website = $_POST['kode_website'];
-		$query = $this->db->query("SELECT * FROM tsurat where bulan LIKE '%$month' and kode_website = '$kode_website' ORDER BY nomor_urut DESC LIMIT 1;");
+		$query = $this->db->query("SELECT * FROM your_table where bulan LIKE '%$month' and kode_website = '$kode_website' ORDER BY nomor_urut DESC LIMIT 1;");
 		$row = $query->row_array();
 		$aw = "000";
         if(!$row){
@@ -883,7 +883,7 @@ class Admin extends CI_Controller {
 				'no' => $no
 			);
 		 
-			$this->M_admin->upload_gambar_user($where,$data,'tuser');
+			$this->M_admin->upload_gambar_user($where,$data,'your_table');
 			$data_upload = array('upload_data' => $this->upload->data(), 'error' => '');
 			$this->load->view('admin/upload_gambar', $data_upload);
 		}
@@ -979,13 +979,13 @@ class Admin extends CI_Controller {
 		$data['sales_list'] = ['Yovan', 'Rafael', 'Alfian', 'Fahrie', 'Erdi', 'Syaehu', 'Irsyad'];
 		
 		// Mengambil semua data transaksi surat/inquiry
-		$data['tsurat'] = $this->db->get('tsurat')->result();   
+		$data['your_table'] = $this->db->get('your_table')->result();   
 		$this->load->view('admin/analytic',$data);
 	}
 
-	// Server-Sent Event untuk auto-refresh halaman analytic saat data tsurat berubah
+	// Server-Sent Event untuk auto-refresh halaman analytic saat data your_table berubah
 	public function check_update(){
-		$row = $this->db->select('COUNT(*) AS total, MAX(tanggal_input) AS last_update', FALSE)->get('tsurat')->row();
+		$row = $this->db->select('COUNT(*) AS total, MAX(tanggal_input) AS last_update', FALSE)->get('your_table')->row();
 		header('Content-Type: text/event-stream');
 		header('Cache-Control: no-cache');
 		echo "data: {$row->total}-{$row->last_update}\n\n";

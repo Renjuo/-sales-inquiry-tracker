@@ -44,7 +44,7 @@ class Login extends CI_Controller
 			'password' => $password_md5
 		];
 
-		$query = $this->M_login->cek_data_login('tuser', $where);
+		$query = $this->M_login->cek_data_login('your_table', $where);
 
 		if ($query->num_rows() > 0) {
 			$user = $query->row();
@@ -101,14 +101,14 @@ class Login extends CI_Controller
 			'level'    => 'guest'
 		];
 
-		$query = $this->M_login->cek_data_login('tuser', $where);
+		$query = $this->M_login->cek_data_login('your_table', $where);
 
 		if ($query->num_rows() > 0) {
 			echo "<script>alert('Username telah digunakan!, Silahkan buka kembali website');</script>";
 			return;
 		}
 
-		$this->M_login->tambah_data($where, 'tuser');
+		$this->M_login->tambah_data($where, 'your_table');
 
 		redirect('login/index');
 	}

@@ -1,7 +1,7 @@
 <?php
 include 'header.php';
-// Foto saat ini: file di ./gambar/ milik user (tuser.gambar), fallback ke avatar default
-$user_foto = isset($_SESSION['no']) ? $this->db->get_where('tuser', array('no' => $_SESSION['no']))->row() : null;
+// Foto saat ini: file di ./gambar/ milik user (your_table.gambar), fallback ke avatar default
+$user_foto = isset($_SESSION['no']) ? $this->db->get_where('your_table', array('no' => $_SESSION['no']))->row() : null;
 $foto = base_url() . 'images/admin.jpg';
 if (!empty($upload_data['file_name'])) {
     $foto = base_url() . 'gambar/' . $upload_data['file_name'];
@@ -9,7 +9,7 @@ if (!empty($upload_data['file_name'])) {
     $foto = base_url() . 'gambar/' . rawurlencode($user_foto->gambar);
 }
 // Warna bubble chat milik user (NULL = biru tema)
-$user_warna = $this->db->select('warna_chat')->get_where('tuser', array('username' => $_SESSION['username']))->row();
+$user_warna = $this->db->select('warna_chat')->get_where('your_table', array('username' => $_SESSION['username']))->row();
 $warna_aktif = ($user_warna && $user_warna->warna_chat) ? $user_warna->warna_chat : '#1e5bd6';
 $warna_bebas = !isset(Admin::WARNA_CHAT[$warna_aktif]); // dipilih lewat lingkaran RGB
 ?>

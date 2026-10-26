@@ -28,7 +28,7 @@ class Api extends CI_Controller {
 	public function form_options(){
 		$json_path = FCPATH . 'vendors/wilayah_indonesia.json';
 		echo json_encode(array(
-			'bidang_usaha' => $this->db->order_by('nama_bidang_usaha')->get('tbidang_usaha')->result(),
+			'bidang_usaha' => $this->db->order_by('nama_bidang_usaha')->get('your_table')->result(),
 			'wilayah'      => file_exists($json_path) ? json_decode(file_get_contents($json_path)) : array(),
 		));
 	}
@@ -56,7 +56,7 @@ class Api extends CI_Controller {
 
 		// WIB secara eksplisit: zona waktu PHP di server bisa berbeda (XAMPP bawaan Europe/Berlin)
 		$data['tanggal_request'] = (new DateTime('now', new DateTimeZone('Asia/Jakarta')))->format('Y-m-d H:i:s');
-		$this->db->insert('trequest_customer', $data);
+		$this->db->insert('your_table', $data);
 		echo json_encode(array('ok' => TRUE));
 	}
 }
