@@ -102,7 +102,8 @@ $pesan_berhasil = $this->session->userdata('berhasil'); if ($pesan_berhasil) { $
         $level = $row_user ? $row_user->level : '';
     }
     $is_admin = ($level == 'admin');
-    $can_add  = ($level == 'admin' || $level == 'sales');
+    $can_add  = ($level == 'admin' || $level == 'sales' || $level == 'business development');
+    $can_request = ($level == 'admin' || $level == 'business development');
     ?>
 
     <aside id="left-panel" class="left-panel">
@@ -147,7 +148,7 @@ $pesan_berhasil = $this->session->userdata('berhasil'); if ($pesan_berhasil) { $
                             <a href="<?php echo base_url(); ?>tambah-data"> <i class="menu-icon fa fa-plus-circle"></i>Tambah Data </a>
 
                         </li>
-                        <?php if ($is_admin) { ?>
+                        <?php if ($can_request) { ?>
                         <li class="<?php echo $is_active('request_customer'); ?>">
                             <a href="<?php echo base_url(); ?>request-customer"> <i class="menu-icon fa fa-inbox"></i>Request Customer <span class="notif-badge" hidden></span></a>
                         </li>
@@ -236,6 +237,7 @@ $pesan_berhasil = $this->session->userdata('berhasil'); if ($pesan_berhasil) { $
                         (function () {
                             var akar = document.documentElement, jadwal = false, x = 0, y = 0;
                             document.addEventListener('mousemove', function (e) {
+                                if (document.getElementById('tabel-baru')) return; // halaman tabel besar: efek dimatikan (lihat index_2.php)
                                 x = e.clientX; y = e.clientY;
                                 if (jadwal) return; jadwal = true;
                                 requestAnimationFrame(function () { jadwal = false; akar.style.setProperty('--mx', x + 'px'); akar.style.setProperty('--my', y + 'px'); akar.style.setProperty('--glow', '1'); });
@@ -243,50 +245,64 @@ $pesan_berhasil = $this->session->userdata('berhasil'); if ($pesan_berhasil) { $
                             document.addEventListener('mouseleave', function () { akar.style.setProperty('--glow', '0'); });
                         })();
                     </script>
-                    <?php if ($is_admin) { ?>
-                    <!-- Notifikasi request baru dari form customer eksternal -->
+                    <!-- Notifikasi: pesan chat masuk (semua user) + request baru dari form customer eksternal (admin) -->
                     <div class="notif-area dropdown">
-                        <a href="#" class="notif-bell" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="Notifikasi request customer">
-                            <i class="fa fa-bell-o"></i><span class="notif-badge" hidden></span>
+                        <a href="#" class="notif-bell" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="Notifikasi">
+                            <i class="fa fa-bell-o"></i><span class="notif-badge" id="notifBadge" hidden></span>
                         </a>
                         <div class="notif-menu dropdown-menu dropdown-menu-right">
-                            <div class="notif-head">Request Customer <span class="notif-count" id="notifCount">0 baru</span></div>
+                            <div class="notif-head">Notifikasi <span class="notif-count" id="notifCount">0 baru</span></div>
                             <div id="notifList"></div>
-                            <a class="notif-all" href="<?php echo base_url(); ?>request-customer">Lihat semua request</a>
+                            <?php if ($can_request) { ?><a class="notif-all" href="<?php echo base_url(); ?>request-customer">Lihat semua request</a><?php } ?>
                         </div>
                     </div>
                     <script>
                         (function () {
-                            var base = '<?php echo base_url(); ?>';
-                            function muat() {
-                                $.getJSON(base + 'notif_request').done(function (r) {
-                                    $('.notif-badge').text(r.jumlah > 99 ? '99+' : r.jumlah).prop('hidden', !r.jumlah);
-                                    $('#notifCount').text(r.jumlah + ' baru');
-                                    var $list = $('#notifList').empty();
-                                    if (!r.data.length) $list.append('<div class="notif-empty"><i class="fa fa-inbox"></i>Belum ada request baru</div>');
-                                    r.data.forEach(function (d) {
-                                        // "2026-10-07 08:44:07" -> "07/10 08:44"
-                                        var waktu = String(d.tanggal_request).replace(/^\d{4}-(\d\d)-(\d\d) (\d\d:\d\d).*$/, '$2/$1 $3');
-                                        $('<a class="notif-item">').attr('href', base + 'tambah-data?request=' + d.id_request)
-                                            .append('<span class="notif-ico"><i class="fa fa-building"></i></span>',
-                                                $('<span class="notif-text">').append($('<strong>').text(d.nama_perusahaan_klien), $('<span>').text((d.kategori ? d.kategori + ' · ' : '') + waktu)),
-                                                '<i class="fa fa-angle-right"></i>')
-                                            .appendTo($list);
-                                    });
+                            var base = '<?php echo base_url(); ?>', admin = <?php echo $can_request ? 'true' : 'false'; ?>;
+                            var req = { jumlah: 0, data: [] }, chat = { jumlah: 0, data: [] };
+                            // "2026-10-07 08:44:07" -> "07/10 08:44"
+                            function jam(t) { return String(t).replace(/^\d{4}-(\d\d)-(\d\d) (\d\d:\d\d).*$/, '$2/$1 $3'); }
+                            function item(ikon, judul, sub) {
+                                return $('<a class="notif-item">').append('<span class="notif-ico"><i class="fa ' + ikon + '"></i></span>',
+                                    $('<span class="notif-text">').append($('<strong>').text(judul), $('<span>').text(sub)), '<i class="fa fa-angle-right"></i>');
+                            }
+                            function gambar() {
+                                var total = req.jumlah + chat.jumlah;
+                                $('#notifBadge').text(total > 99 ? '99+' : total).prop('hidden', !total);
+                                $('.main-menu .notif-badge').text(req.jumlah > 99 ? '99+' : req.jumlah).prop('hidden', !req.jumlah);
+                                $('#notifCount').text(total + ' baru');
+                                var $list = $('#notifList').empty();
+                                if (!total) $list.append('<div class="notif-empty"><i class="fa fa-inbox"></i>Belum ada notifikasi baru</div>');
+                                chat.data.forEach(function (d) {
+                                    item('fa-comments', d.username + ' (' + d.level + ')', d.pesan + ' · ' + d.nama_perusahaan_klien + ' · ' + jam(d.waktu))
+                                        .addClass('notif-chat').attr('href', base + (d.kode_website === 'VB' ? 'data-vibrasindo' : 'data-testindo'))
+                                        .on('click', function (e) {
+                                            // Sudah di halaman tabelnya: langsung buka chat; selain itu dibuka setelah halaman dimuat
+                                            if (window.bpBukaChat && bpBukaChat(d.nomor_surat)) { e.preventDefault(); e.stopPropagation(); return; }
+                                            try { sessionStorage.setItem('bp_chat', d.nomor_surat); } catch (er) {}
+                                        }).appendTo($list);
+                                });
+                                req.data.forEach(function (d) {
+                                    item('fa-building', d.nama_perusahaan_klien, (d.kategori ? d.kategori + ' · ' : '') + jam(d.tanggal_request))
+                                        .attr('href', base + 'tambah-data?request=' + d.id_request).appendTo($list);
                                 });
                             }
+                            function muat() {
+                                if (admin) $.getJSON(base + 'notif_request').done(function (r) { req = r; gambar(); });
+                                $.getJSON(base + 'notif_chat').done(function (r) { chat = r; gambar(); if (window.bpBadgeChat) bpBadgeChat(r.per_baris); });
+                            }
+                            window.bpMuatNotif = muat;
                             $(muat);
-                            setInterval(muat, 30000);
+                            setInterval(muat, 10000);
                         })();
                     </script>
-                    <?php } ?>
                     <div class="user-area dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img class="user-avatar rounded-circle" src="<?php echo base_url(); ?>images/admin.jpg" alt="User Avatar">
                         </a>
 
                         <div class="user-menu dropdown-menu dropdown-menu-right">
-                            <a class="nav-link" href="<?php echo base_url(); ?>ganti-foto"><span class="um-ico"><i class="fa fa-camera"></i></span> Ganti Foto</a>
+                            <a class="nav-link" href="<?php echo base_url(); ?>profil"><span class="um-ico"><i class="fa fa-user-circle-o"></i></span> Profil</a>
                             <a class="nav-link text-danger" href="<?php echo base_url(); ?>login/keluar"><span class="um-ico"><i class="fa fa-sign-out"></i></span> Logout</a>
                         </div>
                     </div>

@@ -12,9 +12,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class MY_Controller extends CI_Controller {
 
-    protected function get_portal_url() {
+    //protected function get_portal_url() {
         // Cek 1: Dari config CI3 (application/config/config.php -> $config['portal_absensi_url'])
-        $config_url = $this->config->item('portal_absensi_url');
+        /*$config_url = $this->config->item('portal_absensi_url');
         if (!empty($config_url)) return rtrim($config_url, '/') . '/';
 
         // Cek 2: Dari environment variable jika ada
@@ -22,8 +22,8 @@ class MY_Controller extends CI_Controller {
         if (!empty($env_url)) return rtrim($env_url, '/') . '/';
 
         // Cek 3: Fallback ke URL Portal Absensi aktif saat ini
-       /* return 'https://erp.testindo.co.id/';*/
-    }
+        return 'https://erp.testindo.co.id/';*/
+    //}
 
     public function __construct() {
         parent::__construct();

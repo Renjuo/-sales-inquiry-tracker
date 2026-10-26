@@ -3,6 +3,11 @@ include 'header.php';
 ?>
 
 <style>
+    /* Tabel besar: efek latar & blur header dimatikan di halaman ini supaya scroll dan ketik tidak lag */
+    body::before, body::after { animation: none; }
+    html::before { display: none; }
+    .right-panel header.header { -webkit-backdrop-filter: none; backdrop-filter: none; }
+
     /* ===== Toolbar: chip status + grid filter ===== */
     .table-toolbar { display: grid; gap: 16px; }
     .toolbar-sub { color: var(--text-muted); font-size: 13px; margin-top: 2px; }
@@ -169,9 +174,14 @@ include 'header.php';
     #tabel-baru th:first-child, #tabel-baru td:first-child, #tabel-baru .col-surat { left: 0; position: sticky; z-index: 1; }
     #tabel-baru .col-surat { box-shadow: 1px 0 0 #e3eaf6; left: var(--col1, 48px); }
     #tabel-baru thead th:first-child, #tabel-baru thead .col-surat { z-index: 3; }
+    /* HP: kolom tidak dikunci, ikut tergeser (left: auto tetap menjaga header sticky di atas) */
+    @media (max-width: 767.98px) {
+        #tabel-baru th:first-child, #tabel-baru td:first-child, #tabel-baru .col-surat { left: auto; }
+        #tabel-baru .col-surat { box-shadow: none; }
+    }
 
     #tabel-baru tr.table-success { --row-bg: #f6fcf8; --row-accent: #22c55e; }
-    #tabel-baru tr.table-primary { --row-bg: #f6f9ff; --row-accent: #3b82f6; }
+    #tabel-baru tr.table-primary { --row-bg: #e3edff; --row-accent: #2563eb; }
     #tabel-baru tr.table-warning { --row-bg: #fefce8; --row-accent: #eab308; }
     #tabel-baru tr.table-secondary { --row-bg: #fafbfc; --row-accent: #94a3b8; }
     #tabel-baru tr.close-gagal { --row-bg: #fcf3f6; --row-accent: #c2577f; }
@@ -298,7 +308,7 @@ include 'header.php';
                                 <label for="nama_sales">Sales</label>
                                 <select class="form-control" name="nama_sales" id="nama_sales">
                                     <?php
-                                        if ($_SESSION['level'] == "admin") {
+                                        if ($_SESSION['level'] == "admin" || $_SESSION['level'] == "business development") {
                                     ?>
                                       <option >Semua Sales</option>
                                       <option >Alfian</option>
@@ -352,6 +362,15 @@ include 'header.php';
                                         <option value="Tidak">Bukan Produk Prioritas</option>
                                     </select>
                             </div>
+                            <?php if ($_SESSION['level'] != "admin") { // admin hanya baca chat: tanpa filter chat ?>
+                            <div class="form-group">
+                                <label for="filter_chat">Chat</label>
+                                <select class="form-control" id="filter_chat">
+                                        <option value="semua">Semua Chat</option>
+                                        <option value="unread">Belum Dibaca</option>
+                                    </select>
+                            </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -603,9 +622,10 @@ include 'header.php';
                                         <?php endif; ?></td>
                                     <td>
                                         <div class="row-actions">
-                                            <a class="icon-btn btn-detail" title="Detail Data" href="#" data-lokasi="<?php echo htmlspecialchars(trim($u->kab_kota . ', ' . $u->provinsi, ', '), ENT_QUOTES, 'UTF-8'); ?>"><i class="fa fa-eye"></i></a>
-                                            <a class="icon-btn" title="Ubah Data" href="<?php echo base_url();?>edit_data/<?php echo $u->nomor_surat?>" target="_blank"><i class="fa fa-pencil"></i></a>
-                                            <a class="icon-btn danger" title="Hapus Data" href="<?php echo base_url();?>hapus_data/<?php echo $u->nomor_urut?>"><i class="fa fa-trash-o"></i></a>
+                                            <a class="icon-btn btn-detail" data-info="Detail Data" aria-label="Detail Data" href="#" data-lokasi="<?php echo htmlspecialchars(trim($u->kab_kota . ', ' . $u->provinsi, ', '), ENT_QUOTES, 'UTF-8'); ?>"><i class="fa fa-eye"></i></a>
+                                            <a class="icon-btn btn-chat" data-info="Chat" aria-label="Chat" href="#" data-no="<?php echo htmlspecialchars($u->nomor_surat, ENT_QUOTES, 'UTF-8'); ?>"><i class="fa fa-commenting-o"></i><span class="chat-badge" hidden></span></a>
+                                            <a class="icon-btn" data-info="Ubah Data" aria-label="Ubah Data" href="<?php echo base_url();?>edit_data/<?php echo $u->nomor_surat?>" target="_blank"><i class="fa fa-pencil"></i></a>
+                                            <a class="icon-btn danger" data-info="Hapus Data" aria-label="Hapus Data" href="<?php echo base_url();?>hapus_data/<?php echo $u->nomor_urut?>"><i class="fa fa-trash-o"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -625,6 +645,7 @@ include 'header.php';
         // 1. Inisialisasi DataTables dengan fitur colVis (Column Visibility)
         var table = $('#tabel-baru').DataTable({
             "order": [],
+            "searchDelay": 300, // cari setelah berhenti mengetik, bukan tiap huruf
             "language": { "search": "", "searchPlaceholder": "Cari perusahaan, no. surat, sales...", "lengthMenu": "_MENU_ per halaman", "info": "_START_–_END_ dari _TOTAL_ data", "infoFiltered": "(disaring dari _MAX_)", "paginate": { "previous": "‹", "next": "›" } },
             "dom": '<"dt-top"lf>r<"table-scroll"t><"dt-bottom"ip>', 
             "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Semua"]], 
@@ -647,12 +668,14 @@ include 'header.php';
         $(window).on('resize', setCol1);
         
         // --- RENDER PENOMORAN DINAMIS DENGAN IKON EMOJI PROSPEK (HANYA SUDAH QUOTE) ---
-        table.on('order.dt search.dt', function () {
-            table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+        // Hanya baris di halaman yang tampil (bukan semua data), nomor dilanjutkan dari awal halaman
+        table.on('draw.dt', function () {
+            var awal = table.page.info().start;
+            table.column(0, {search:'applied', order:'applied', page:'current'}).nodes().each( function (cell, i) {
                 var $tr = $(cell).closest('tr');
                 var statusBaris = $tr.attr('data-status') ? $tr.attr('data-status').trim() : "";
                 var prospek = $tr.attr('data-prospek') ? $tr.attr('data-prospek').trim() : "Cold";
-                var nomor = i + 1;
+                var nomor = awal + i + 1;
                 
                 if (statusBaris === "Sudah Quote") {
                     $(cell).css('cursor', 'pointer'); 
@@ -768,6 +791,11 @@ include 'header.php';
                     }
                 }
 
+                // --- FILTER 6: CHAT BELUM DIBACA (badge diisi bpBadgeChat dari notif_chat) ---
+                if ($('#filter_chat').val() === 'unread' && !$(rowNode).find('.btn-chat').hasClass('ada-pesan')) {
+                    return false;
+                }
+
                 return true;
             }
         );
@@ -785,9 +813,19 @@ include 'header.php';
         });
 
         // 4. EVENT B: Trigger Real-time ketika input-input filter berubah
-        $('#time_from, #time_to, #nama_sales, #filter_priority, #filter_prospek, #filter_produk_prioritas').on('change keyup', function() {
+        $('#time_from, #time_to, #nama_sales, #filter_priority, #filter_prospek, #filter_produk_prioritas, #filter_chat').on('change keyup', function() {
             table.draw();
         });
+
+        // Dari notifikasi chat: baris tujuan bisa tersembunyi filter/pencarian, semuanya dikosongkan dulu
+        window.bpResetFilter = function() {
+            $('.status-inq.on').removeClass('on');
+            statusAktif = [];
+            if ($('#time_from').val() || $('#time_to').val()) { var hapus = document.querySelector('.drp .drp-clear'); if (hapus) hapus.click(); }
+            $('#filter_priority, #filter_prospek, #filter_produk_prioritas, #filter_chat').val('semua');
+            $('#nama_sales').prop('selectedIndex', 0);
+            table.search('').draw();
+        };
 
         // 5. EVENT C: Tombol Submit
         $('#save').on('click', function(e) {
@@ -795,10 +833,6 @@ include 'header.php';
             table.draw();
         });
         
-        // Memicu filter live DataTables ketika dropdown filter prospek diubah
-        $('#time_from, #time_to, #nama_sales, #filter_priority, #filter_prospek').on('change keyup', function() {
-            table.draw();
-        });
         
         // 1. TAMBAHKAN EVENT UNTUK MENUTUP MENU JIKA USER KLIK DI LUAR MENU
         $(document).on('click', function(e) {
@@ -1013,6 +1047,186 @@ include 'header.php';
     $(document).on('mousedown', function (e) { if ($bubble && !$(e.target).closest('.dt-bubble, .btn-detail').length) tutup(); });
     $(document).on('keydown', function (e) { if (e.key === 'Escape') tutup(); });
     document.addEventListener('scroll', function (e) { if ($bubble && !$bubble[0].contains(e.target)) tutup(); }, true);
+  })(jQuery);
+</script>
+<!-- Bubble chat per baris (aksi ikon chat): percakapan antar user tentang data ini, jam kirim tiap pesan, badge pesan masuk -->
+<style>
+  .btn-chat { position: relative; }
+  .chat-badge { align-items: center; background: #dc2626; border-radius: 999px; box-shadow: 0 0 0 2px #fff; color: #fff; display: inline-flex; font-size: 10px; font-weight: 700; height: 17px; justify-content: center; line-height: 1; min-width: 17px; padding: 0 4px; position: absolute; right: -7px; top: -7px; }
+  .chat-badge[hidden] { display: none; }
+  .btn-chat.ada-pesan { background: var(--brand-soft); border-color: #c7d7fe; color: var(--brand-700) !important; } /* ada pesan: warna tema, angka merah di badge */
+  .btn-chat.ada-pesan .chat-badge, #tabel-baru td[data-pesan]::after { animation: chat-denyut 1.6s ease-out infinite; }
+  #tabel-baru td[data-pesan]::after { align-items: center; background: #dc2626; border-radius: 999px; color: #fff; content: attr(data-pesan); display: inline-flex; font-size: 10px; font-weight: 700; height: 17px; justify-content: center; line-height: 1; min-width: 17px; padding: 0 4px; position: absolute; left: 6px; top: 4px; } /* kiri: sisi kanan sel tertutup kolom No. Surat saat tabel digeser */
+  @keyframes chat-denyut { 0% { box-shadow: 0 0 0 2px #fff, 0 0 0 2px rgba(220, 38, 38, .45); } 100% { box-shadow: 0 0 0 2px #fff, 0 0 0 9px rgba(220, 38, 38, 0); } }
+  .chat-bubble { display: flex; flex-direction: column; }
+  .chat-bubble .dt-bubble-head small { color: var(--text-muted); display: block; font-size: 11.5px; font-weight: 500; }
+  .chat-isi { display: flex; flex-direction: column; gap: 8px; height: min(320px, 50vh); overflow-y: auto; padding: 12px 14px; }
+  .chat-kosong { color: var(--text-muted); font-size: 13px; margin: auto; text-align: center; }
+  .chat-kosong .fa { color: var(--text-faint); display: block; font-size: 22px; margin-bottom: 6px; }
+  .chat-msg { align-items: flex-start; align-self: flex-start; display: flex; flex-direction: column; max-width: 82%; } /* lebar ikut isi pesan */
+  .chat-msg .chat-nama { color: var(--text-muted); font-size: 11.5px; font-weight: 600; margin: 0 4px 2px; }
+  .chat-msg .chat-teks { background: #eef1f6; border: 1px solid #dde3ec; border-radius: 14px 14px 14px 4px; color: var(--text-strong); font-size: 13px; line-height: 1.45; overflow-wrap: anywhere; padding: 7px 11px; }
+  .chat-msg .chat-teks > span:first-child { white-space: pre-line; }
+  /* Jam kirim di pojok kanan bawah bubble, setelah teks (gaya WhatsApp) */
+  .chat-msg .chat-waktu { color: var(--text-faint); float: right; font-size: 10.5px; font-variant-numeric: tabular-nums; line-height: 1; margin: 9px -2px -3px 10px; white-space: nowrap; }
+  .chat-msg.saya .chat-waktu { color: rgba(255, 255, 255, .78); }
+  .chat-cek { color: #94a3b8; font-size: 11px; letter-spacing: -4px; margin-left: 4px; padding-right: 4px; }
+  .chat-cek.dibaca { color: #2563eb; }
+  .chat-msg.saya .chat-cek { color: rgba(255, 255, 255, .6); }
+  .chat-msg.saya .chat-cek.dibaca { color: #7dd3fc; } /* biru muda: tetap terlihat di bubble biru */
+  .chat-baca-saja { color: var(--text-muted); font-size: 12.5px; text-align: center; }
+  .chat-msg.saya { align-items: flex-end; align-self: flex-end; }
+  /* Warna pilihan pengirim (halaman Profil), dilihat semua user; warna muda memakai teks gelap */
+  .chat-msg.berwarna .chat-teks { background: var(--chat-warna) !important; border-color: var(--chat-warna) !important; color: #fff !important; }
+  .chat-msg.berwarna .chat-waktu { color: rgba(255, 255, 255, .78); }
+  .chat-msg.berwarna .chat-cek { color: rgba(255, 255, 255, .6); }
+  .chat-msg.berwarna .chat-cek.dibaca { color: #7dd3fc; }
+  .chat-msg.berwarna.terang .chat-teks { color: #0f172a !important; }
+  .chat-msg.berwarna.terang .chat-waktu { color: rgba(15, 23, 42, .6); }
+  .chat-msg.berwarna.terang .chat-cek { color: rgba(15, 23, 42, .45); }
+  .chat-msg.berwarna.terang .chat-cek.dibaca { color: #1d4ed8; }
+  /* Tampilan admin: Business Development biru, sales hijau */
+  .chat-msg.lv-bd .chat-teks { background: #e8f0fe; border-color: #c7d7fe; }
+  .chat-msg.lv-bd .chat-nama { color: var(--brand-700); }
+  .chat-msg.lv-sales .chat-teks { background: #e7f7ee; border-color: #bfe8cf; }
+  .chat-msg.lv-sales .chat-nama { color: #15803d; }
+  .chat-msg.saya .chat-teks { background: var(--brand-600); border-color: var(--brand-600); border-radius: 14px 14px 4px 14px; color: #fff; }
+  .chat-form { align-items: flex-end; display: flex; gap: 8px; }
+  .chat-form textarea { background: #fff; border: 1px solid var(--border); border-radius: 10px; color: var(--text-strong); flex: 1; font-size: 13px; max-height: 96px; min-height: 36px; outline: 0; padding: 8px 10px; resize: none; }
+  .chat-form textarea:focus { border-color: var(--brand-600); box-shadow: 0 0 0 3px var(--brand-soft); }
+  .dt-bubble-foot .chat-form .btn { flex: 0 0 38px; height: 36px; padding: 0; width: 38px; }
+</style>
+<script>
+  (function ($) {
+    var base = '<?php echo base_url(); ?>', $bubble = null, $btn = null, no = '', terakhir = -1, poll = null;
+    // "2026-10-21 09:05:33" -> "09:05" (hari ini) atau "20/10 09:05"
+    function waktu(t) {
+      var m = String(t).match(/^(\d{4})-(\d\d)-(\d\d) (\d\d:\d\d)/), d = new Date();
+      if (!m) return t;
+      return (+m[1] === d.getFullYear() && +m[2] === d.getMonth() + 1 && +m[3] === d.getDate()) ? m[4] : m[3] + '/' + m[2] + ' ' + m[4];
+    }
+
+    // Warna muda (luminans tinggi) tidak terbaca dengan teks putih
+    function terang(hex) {
+      var m = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex || '');
+      return !!m && (parseInt(m[1], 16) * 299 + parseInt(m[2], 16) * 587 + parseInt(m[3], 16) * 114) / 1000 > 160;
+    }
+
+    function tampil(r) {
+      // Digambar ulang bila ada pesan baru atau ceklis berubah jadi biru
+      var data = r.data || [], id = (data.length ? data[data.length - 1].id_chat : 0) + ':' + data.filter(function (c) { return c.dibaca; }).length
+        + ':' + data.map(function (c) { return c.warna || ''; }).join(); // ganti warna di Profil juga menggambar ulang
+      if (!$bubble || id === terakhir) return;
+      // Admin hanya baca: kotak tulis pesan diganti keterangan
+      if (!r.boleh_kirim) $bubble.find('.chat-form').replaceWith('<div class="chat-baca-saja"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Hanya baca" role="img"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="8" y1="6" x2="16" y2="14"/></svg></div>');
+      var $isi = $bubble.find('.chat-isi'), bawah = terakhir === -1 || $isi[0].scrollHeight - $isi.scrollTop() - $isi.innerHeight() < 40;
+      terakhir = id;
+      // Warna bubble pesan sendiri sesuai pilihan di halaman Profil (kosong = biru tema)
+      $isi.empty();
+      if (!data.length) $isi.append('<div class="chat-kosong"><i class="fa fa-comments-o"></i>Belum ada pesan.' + (r.boleh_kirim ? '<br>Mulai percakapan tentang data ini.' : '') + '</div>');
+      data.forEach(function (c) {
+        var saya = c.saya;
+        // Admin (hanya baca): bubble Business Development & sales dibedakan warnanya
+        $('<div class="chat-msg">').toggleClass('saya', saya).toggleClass('lv-bd', !r.boleh_kirim && c.level === 'Business Development').toggleClass('lv-sales', !r.boleh_kirim && c.level === 'sales')
+          .toggleClass('berwarna', !!c.warna).toggleClass('terang', terang(c.warna)).attr('style', c.warna ? '--chat-warna: ' + c.warna : null).append(
+          saya ? '' : $('<span class="chat-nama">').text(c.username + ' (' + c.level + ')'),
+          $('<div class="chat-teks">').append($('<span>').text(c.pesan), $('<span class="chat-waktu">').text(waktu(c.waktu)).append(
+            // Ceklis 2 hanya di pesan sendiri: abu-abu = terkirim, biru = sudah dibuka penerima
+            saya ? $('<span class="chat-cek">✓✓</span>').toggleClass('dibaca', c.dibaca).attr('title', c.dibaca ? 'Sudah dibaca' : 'Terkirim') : ''))
+        ).appendTo($isi);
+      });
+      if (bawah) $isi.scrollTop($isi[0].scrollHeight);
+      if (window.bpMuatNotif) bpMuatNotif(); // pesan sudah dibaca: badge & notifikasi diperbarui
+    }
+    // Pesan dianggap dibaca hanya bila jendela ini sedang aktif (bukan sekadar chat terbuka di jendela lain)
+    function muat() { return $.getJSON(base + 'chat', { no: no, baca: document.hasFocus() ? 1 : 0 }).done(tampil); }
+    $(window).on('focus', function () { if ($bubble) muat().done(function () { if (window.bpMuatNotif) bpMuatNotif(); }); });
+
+    function tutup() { if ($bubble) { $bubble.remove(); $btn.removeClass('aktif'); clearInterval(poll); $bubble = $btn = null; } }
+
+    $(document).on('click', '.btn-chat', function (e) {
+      e.preventDefault();
+      if ($btn && $btn[0] === this) { tutup(); return; }
+      tutup();
+      $btn = $(this).addClass('aktif'); no = String($btn.data('no')); terakhir = -1;
+      $bubble = $('<div class="dt-bubble chat-bubble" role="dialog" aria-label="Chat data">').append(
+        $('<div class="dt-bubble-head">').append(
+          $('<span>').text('Chat').append($('<small>').text(no)),
+          '<button type="button" data-tutup aria-label="Tutup"><i class="fa fa-times"></i></button>'),
+        '<div class="chat-isi" aria-live="polite"><div class="chat-kosong">Memuat pesan...</div></div>',
+        '<div class="dt-bubble-foot"><form class="chat-form"><textarea rows="1" maxlength="2000" placeholder="Tulis pesan..." aria-label="Tulis pesan"></textarea>' +
+          '<button type="submit" class="btn btn-primary" aria-label="Kirim"><i class="fa fa-paper-plane"></i></button></form></div>'
+      ).appendTo('body');
+
+      // Posisi sama seperti bubble detail: di kiri tombol dengan panah; di layar sempit di bawah tombol
+      var r = this.getBoundingClientRect(), w = $bubble.outerWidth(), h = $bubble.outerHeight();
+      if (r.left - w - 14 > 8) {
+        var top = Math.max(8, Math.min(r.top - 12, window.innerHeight - h - 8));
+        // Tombol di luar layar kanan (tabel belum digeser): bubble tetap di dalam layar
+        $bubble.css({ left: Math.min(r.left - w - 14, window.innerWidth - w - 12) + window.scrollX, top: top + window.scrollY, '--panah': Math.max(14, r.top + r.height / 2 - top - 6) + 'px' });
+      } else {
+        $bubble.addClass('di-bawah').css({ left: Math.max(12, Math.min(r.right - w, window.innerWidth - w - 12)) + window.scrollX, top: r.bottom + 8 + window.scrollY });
+      }
+      $bubble.find('textarea').trigger('focus');
+      muat();
+      poll = setInterval(muat, 3000);   // pesan baru masuk tanpa reload
+    });
+
+    $(document).on('submit', '.chat-form', function (e) {
+      e.preventDefault();
+      var $t = $(this).find('textarea'), pesan = $.trim($t.val()), $kirim = $(this).find('[type=submit]');
+      if (!pesan) return;
+      $kirim.prop('disabled', true);
+      $.post(base + 'chat', { no: no, pesan: pesan }, null, 'json')
+        .done(function (r) { $t.val('').css('height', ''); terakhir = -1; tampil(r); })
+        .fail(function () { alert('Gagal mengirim pesan, silakan coba lagi.'); })
+        .always(function () { $kirim.prop('disabled', false); $t.trigger('focus'); });
+    });
+    // Enter = kirim, Shift+Enter = baris baru; tinggi kotak ikut isi
+    $(document).on('keydown', '.chat-form textarea', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $(this).closest('form').trigger('submit'); } });
+    $(document).on('input', '.chat-form textarea', function () { this.style.height = ''; this.style.height = this.scrollHeight + 2 + 'px'; });
+
+    $(document).on('click', '.chat-bubble [data-tutup]', tutup);
+    $(document).on('mousedown', function (e) { if ($bubble && !$(e.target).closest('.chat-bubble, .btn-chat, .notif-area').length) tutup(); });
+    $(document).on('keydown', function (e) { if (e.key === 'Escape') tutup(); });
+
+    // Badge pesan masuk per baris, diisi dari notifikasi header (notif_chat)
+    function tombolChat() { var $t = window.jQuery('#tabel-baru'); return window.jQuery.fn.dataTable && window.jQuery.fn.dataTable.isDataTable($t) ? $($t.DataTable().rows().nodes()).find('.btn-chat') : $('.btn-chat'); }
+    // Fungsi global, bukan event jQuery: halaman ini memuat 2 jQuery (header & footer), event antar keduanya tidak sampai
+    var badgeTerakhir = '';
+    window.bpBadgeChat = function (perBaris) {
+      tombolChat().each(function () {
+        var n = perBaris[String($(this).data('no'))] || 0;
+        if ($btn && $btn[0] === this && document.hasFocus()) n = 0; // sedang dibuka & dilihat: dianggap sudah dibaca
+        $(this).toggleClass('ada-pesan', n > 0).attr({ 'data-info': n ? n + ' pesan baru' : 'Chat', 'aria-label': n ? n + ' pesan baru' : 'Chat' })
+          .find('.chat-badge').text(n > 99 ? '99+' : n).prop('hidden', !n);
+        // Juga di kolom No.: lewat atribut, karena isi sel No. ditulis ulang tiap urut/cari
+        $(this).closest('tr').children('td').first().attr('data-pesan', n ? (n > 99 ? '99+' : n) : null);
+      });
+      // Filter chat aktif: tabel disaring ulang bila daftar pesan berubah (tidak saat chat terbuka, supaya barisnya tidak hilang)
+      var kunci = JSON.stringify(perBaris);
+      if (kunci !== badgeTerakhir && !$btn && $('#filter_chat').val() === 'unread') window.jQuery('#tabel-baru').DataTable().draw(false);
+      if (!$btn) badgeTerakhir = kunci;
+    };
+
+    // Dari notifikasi: pindah ke halaman tabel tempat barisnya lalu buka chat. false = baris tidak ada di halaman ini.
+    window.bpBukaChat = function (nomor) {
+      var tombol = tombolChat().filter(function () { return String($(this).data('no')) === nomor; })[0];
+      if (!tombol) return false;
+      var table = window.jQuery('#tabel-baru').DataTable(), tr = $(tombol).closest('tr')[0];
+      var pos = table.rows({ order: 'applied', search: 'applied' }).nodes().toArray().indexOf(tr);
+      if (pos < 0 && window.bpResetFilter) { bpResetFilter(); pos = table.rows({ order: 'applied', search: 'applied' }).nodes().toArray().indexOf(tr); }
+      if (pos < 0) return false;
+      if (table.page.len() > 0) table.page(Math.floor(pos / table.page.len())).draw(false);
+      tombol.scrollIntoView({ block: 'center', inline: 'nearest' }); // kolom Aksi di ujung kanan: tabel ikut digeser supaya bubble terlihat
+      setTimeout(function () { if (!$btn || $btn[0] !== tombol) $(tombol).trigger('click'); }, 50);
+      return true;
+    };
+    $(window).on('load', function () {
+      var nomor = null;
+      try { nomor = sessionStorage.getItem('bp_chat'); sessionStorage.removeItem('bp_chat'); } catch (e) {}
+      if (nomor) setTimeout(function () { window.bpBukaChat(nomor); }, 300);
+    });
   })(jQuery);
 </script>
 <!-- Popup edit: form edit_data dimuat ke sini, simpan tanpa pindah halaman -->

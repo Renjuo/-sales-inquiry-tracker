@@ -8,6 +8,10 @@ if (!empty($upload_data['file_name'])) {
 } elseif ($user_foto && !empty($user_foto->gambar) && is_file(FCPATH . 'gambar/' . $user_foto->gambar)) {
     $foto = base_url() . 'gambar/' . rawurlencode($user_foto->gambar);
 }
+// Warna bubble chat milik user (NULL = biru tema)
+$user_warna = $this->db->select('warna_chat')->get_where('tuser', array('username' => $_SESSION['username']))->row();
+$warna_aktif = ($user_warna && $user_warna->warna_chat) ? $user_warna->warna_chat : '#1e5bd6';
+$warna_bebas = !isset(Admin::WARNA_CHAT[$warna_aktif]); // dipilih lewat lingkaran RGB
 ?>
 <style>
     .foto-wrap { align-items: center; display: flex; gap: 24px; }
@@ -53,6 +57,31 @@ if (!empty($upload_data['file_name'])) {
         .foto-drop small { font-size: 11px; }
     }
     .card-body .alert p { margin: 0; color: inherit; font-size: 13px; }
+
+    /* Warna bubble chat: pilihan warna + pratinjau percakapan */
+    .warna-wrap { align-items: center; display: flex; flex-wrap: wrap; gap: 24px; }
+    .warna-pilih { display: flex; flex: 1 1 280px; flex-wrap: wrap; gap: 10px; margin: 0; }
+    .warna-opsi { cursor: pointer; margin: 0; position: relative; }
+    .warna-opsi input { opacity: 0; pointer-events: none; position: absolute; }
+    .warna-opsi span { border: 3px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1px var(--border); display: block; height: 38px; transition: box-shadow .15s ease, transform .15s ease; width: 38px; }
+    .warna-opsi:hover span { transform: scale(1.08); }
+    .warna-opsi input:checked + span { box-shadow: 0 0 0 2px var(--chip); }
+    .warna-opsi input:checked + span::after { color: #fff; content: "\f00c"; display: flex; font: 14px/32px FontAwesome; justify-content: center; }
+    .warna-opsi input:focus-visible + span { box-shadow: 0 0 0 2px var(--chip), 0 0 0 5px rgba(30, 91, 214, .25); }
+    .warna-contoh { background: var(--bg-page); border: 1px solid var(--border); border-radius: 16px; display: flex; flex: 1 1 260px; flex-direction: column; gap: 8px; padding: 14px; }
+    .warna-contoh .bubble { border-radius: 14px; font-size: 13px; max-width: 80%; padding: 7px 11px; }
+    .warna-contoh .masuk { align-self: flex-start; background: #eef1f6; border: 1px solid #dde3ec; border-bottom-left-radius: 4px; color: var(--text-strong); }
+    .warna-contoh .keluar { align-self: flex-end; background: var(--warna); border-bottom-right-radius: 4px; color: #fff; transition: background-color .2s ease; }
+    .warna-contoh .keluar small { color: rgba(255, 255, 255, .78); font-size: 10.5px; margin-left: 8px; }
+    .warna-contoh.terang .keluar { color: #0f172a; }
+    .warna-contoh.terang .keluar small { color: rgba(15, 23, 42, .6); }
+    /* Lingkaran RGB: warna bebas; setelah dipilih, isinya warna terpilih dengan cincin pelangi */
+    .warna-rgb span { background: conic-gradient(#f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00) !important; }
+    .warna-rgb input:checked + span { background: radial-gradient(circle, var(--chip) 0 52%, transparent 54%), conic-gradient(#f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00) !important; }
+    .warna-rgb input:checked + span::after { content: none; }
+    .warna-rgb input[type=color] { border: 0; cursor: pointer; height: 100%; inset: 0; opacity: 0; padding: 0; pointer-events: auto; width: 100%; }
+    html[data-theme="dark"] .warna-opsi span { border-color: var(--bg-surface); }
+    html[data-theme="dark"] .warna-contoh .masuk { background: #1c2a49; border-color: #2a3a57; }
 </style>
 <div class="content mt-3">
     <div class="animated fadeIn">
@@ -60,7 +89,7 @@ if (!empty($upload_data['file_name'])) {
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <strong class="card-title">Ganti Foto</strong>
+                        <strong class="card-title">Profil</strong>
                         <div class="text-muted" style="font-size: 12.5px;">Foto profil akun <?php echo htmlspecialchars($_SESSION['username']); ?></div>
                     </div>
                     <div class="card-body">
@@ -90,6 +119,44 @@ if (!empty($upload_data['file_name'])) {
                         </form>
                     </div>
                 </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">Warna Bubble Chat</strong>
+                        <div class="text-muted" style="font-size: 12.5px;">Warna pesan Anda di chat data, terlihat oleh semua user</div>
+                    </div>
+                    <div class="card-body">
+                        <?php if ($this->session->flashdata('warna_ok')) { ?>
+                            <div class="alert alert-success"><p><i class="fa fa-check-circle"></i>&nbsp; Warna bubble chat berhasil disimpan.</p></div>
+                        <?php } ?>
+                        <?php echo form_open('simpan_warna_chat'); ?>
+                            <div class="warna-wrap">
+                                <div class="warna-pilih" role="radiogroup" aria-label="Warna bubble chat">
+                                    <?php foreach (Admin::WARNA_CHAT as $kode => $nama) { ?>
+                                        <label class="warna-opsi" title="<?php echo $nama; ?>" style="--chip: <?php echo $kode; ?>">
+                                            <input type="radio" name="warna_chat" value="<?php echo $kode; ?>" aria-label="<?php echo $nama; ?>" <?php echo $kode === $warna_aktif ? 'checked' : ''; ?>>
+                                            <span style="background: <?php echo $kode; ?>"></span>
+                                        </label>
+                                    <?php } ?>
+                                    <label class="warna-opsi warna-rgb" title="Warna lain" style="--chip: <?php echo $warna_bebas ? $warna_aktif : '#ffffff'; ?>">
+                                        <input type="radio" name="warna_chat" id="warnaRgb" value="<?php echo $warna_bebas ? $warna_aktif : ''; ?>" aria-label="Warna lain" <?php echo $warna_bebas ? 'checked' : ''; ?>>
+                                        <span></span>
+                                        <input type="color" id="warnaPicker" value="<?php echo $warna_aktif; ?>" aria-label="Pilih warna lain">
+                                    </label>
+                                </div>
+                                <div class="warna-contoh" id="warnaContoh" style="--warna: <?php echo $warna_aktif; ?>" aria-hidden="true">
+                                    <div class="bubble masuk">Halo, data ini mohon dicek ya.</div>
+                                    <div class="bubble keluar">Baik, segera saya proses.<small>09:15 &#10003;&#10003;</small></div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button type="submit" class="btn btn-primary" style="height: 42px; border-radius: 12px; padding: 0 22px;">
+                                    <i class="fa fa-check"></i>&nbsp; Simpan Warna
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -112,6 +179,24 @@ if (!empty($upload_data['file_name'])) {
             drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('is-drag'); });
         });
         drop.addEventListener('drop', function (e) { input.files = e.dataTransfer.files; tampil(); });
+
+        // Pratinjau warna bubble sebelum disimpan; warna muda memakai teks gelap (sama seperti di chat)
+        var contoh = document.getElementById('warnaContoh'), rgb = document.getElementById('warnaRgb');
+        function pratinjau(hex) {
+            var m = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex) || [0, 0, 0, 0];
+            contoh.style.setProperty('--warna', hex);
+            contoh.classList.toggle('terang', (parseInt(m[1], 16) * 299 + parseInt(m[2], 16) * 587 + parseInt(m[3], 16) * 114) / 1000 > 160);
+        }
+        Array.prototype.forEach.call(document.querySelectorAll('input[name=warna_chat]'), function (r) {
+            r.addEventListener('change', function () { if (r.value) pratinjau(r.value); });
+        });
+        document.getElementById('warnaPicker').addEventListener('input', function () {
+            rgb.value = this.value;
+            rgb.checked = true;
+            rgb.parentNode.style.setProperty('--chip', this.value);
+            pratinjau(this.value);
+        });
+        pratinjau(contoh.style.getPropertyValue('--warna').trim());
     })();
 </script>
 <?php

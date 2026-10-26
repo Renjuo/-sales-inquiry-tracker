@@ -2,6 +2,12 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
  
 class Admin extends CI_Controller {
+
+	// Pilihan warna bubble chat (halaman Profil): semua cukup gelap untuk teks & ceklis putih
+	const WARNA_CHAT = array(
+		'#1e5bd6' => 'Biru', '#0f766e' => 'Toska', '#15803d' => 'Hijau', '#6d28d9' => 'Ungu',
+		'#be185d' => 'Magenta', '#c2410c' => 'Oranye', '#b91c1c' => 'Merah', '#334155' => 'Grafit',
+	);
 	
 	function __construct(){
 		parent::__construct();
@@ -39,7 +45,7 @@ class Admin extends CI_Controller {
 	}
 	
 	public function index_2($kode_web){
-    		$data['table_2'] = $this->M_admin->tampil_data($kode_web)->result(); 
+    		$data['table_2'] = $this->M_admin->tampil_data($kode_web)->result();
     		$this->load->view('admin/index_2', $data);
 	}
 
@@ -159,7 +165,7 @@ class Admin extends CI_Controller {
 		}
 		// Dibuka dari menu Request Customer: isian customer dipakai sebagai nilai awal form
 		$id_request = (int) $this->input->get('request');
-		$data['request'] = ($id_request && $this->_is_admin()) ? $this->db->get_where('trequest_customer', array('id_request' => $id_request))->row_array() : NULL;
+		$data['request'] = ($id_request && $this->_boleh_request()) ? $this->db->get_where('trequest_customer', array('id_request' => $id_request))->row_array() : NULL;
 
 		$json_path = FCPATH . 'vendors/wilayah_indonesia.json';
     
@@ -315,7 +321,7 @@ class Admin extends CI_Controller {
 		if ($this->db->field_exists('detail_kategori', 'tsurat')) $data['detail_kategori'] = (string) $this->input->post('detail_kategori');
 		$this->M_admin->masukan_data($data,'tsurat');
 		// Berasal dari Request Customer: sudah tersimpan di tsurat, hapus dari trequest_customer
-		if (($id_request = (int) $this->input->post('id_request')) && $this->_is_admin()) {
+		if (($id_request = (int) $this->input->post('id_request')) && $this->_boleh_request()) {
 			$this->db->delete('trequest_customer', array('id_request' => $id_request));
 		}
 		// Ditampilkan sekali di halaman berikutnya (header.php), di posisi loader, hilang sendiri setelah 2 detik
@@ -323,34 +329,134 @@ class Admin extends CI_Controller {
 		redirect('data-testindo');
 	}
 
-	// Request Customer hanya untuk admin (level dari session; fallback ke tuser seperti di header.php)
-	private function _is_admin(){
-		if (!isset($_SESSION['username'])) return FALSE;
+	// Request Customer untuk admin & Business Development (level dari session; fallback ke tuser seperti di header.php)
+	private function _level(){
+		if (!isset($_SESSION['username'])) return '';
 		$level = isset($_SESSION['level']) ? $_SESSION['level'] : '';
 		if ($level === '') {
 			$row = $this->db->get_where('tuser', array('username' => $_SESSION['username']))->row();
 			$level = $row ? $row->level : '';
 		}
-		return $level == 'admin';
+		return $level;
+	}
+
+	private function _boleh_request(){
+		return in_array($this->_level(), array('admin', 'business development'), TRUE);
+	}
+
+	// Chat: Business Development & admin melihat semua data; yang bisa kirim pesan hanya Business Development & sales pemilik data.
+	// Admin hanya baca (tidak mengubah ceklis dibaca).
+	private function _lihat_semua_chat(){
+		return in_array($this->_level(), array('admin', 'business development'), TRUE);
+	}
+
+	// Kolom tsurat yang mencatat kapan level ini terakhir membaca chat (ceklis 2 biru); NULL = tidak ikut chat (admin)
+	private function _kolom_baca(){
+		$kolom = array('sales' => 'sales_last_read_at', 'business development' => 'bd_last_read_at');
+		$level = $this->_level();
+		return isset($kolom[$level]) ? $kolom[$level] : NULL;
+	}
+
+	private function _label_level($level){
+		return $level === 'business development' ? 'Business Development' : $level;
+	}
+
+	private function _sekarang(){
+		// Jam WIB, tidak bergantung date.timezone server (lokal XAMPP: Europe/Berlin)
+		return (new DateTime('now', new DateTimeZone('Asia/Jakarta')))->format('Y-m-d H:i:s');
+	}
+
+	// Kolom Sales (pic) berisi username atau nama lengkap sales, mis. "Alfin Rusdi" untuk username alfin
+	private function _nama_saya(){
+		$row = $this->db->select('nama_lengkap')->get_where('tuser', array('username' => $_SESSION['username']))->row();
+		return array_values(array_filter(array($_SESSION['username'], $row ? $row->nama_lengkap : '')));
+	}
+
+	// Baris data yang boleh dibuka chat-nya: semua data untuk admin & Business Development, sales hanya data miliknya (pic)
+	private function _data_chat($nomor_surat){
+		if (!isset($_SESSION['username']) || $nomor_surat === '') return NULL;
+		$nama = $this->_lihat_semua_chat() ? NULL : $this->_nama_saya(); // diambil dulu, sebelum query tsurat disusun
+		$this->db->select('nomor_surat, sales_last_read_at, bd_last_read_at')->where('nomor_surat', $nomor_surat);
+		if ($nama) $this->db->where_in('pic', $nama);
+		return $this->db->get('tsurat')->row();
+	}
+
+	// GET: isi chat satu baris (baca=1: ditandai dibaca). POST pesan: kirim pesan lalu kembalikan isi chat.
+	public function chat(){
+		$no = (string) $this->input->get_post('no');
+		$surat = $this->_data_chat($no);
+		if (!$surat) { $this->output->set_status_header(403); return; }
+		$saya  = $_SESSION['username'];
+		$kolom = $this->_kolom_baca(); // NULL untuk admin: hanya baca
+		$pesan = trim((string) $this->input->post('pesan')); // tanpa xss_clean: ditampilkan sebagai teks (.text()) di browser
+		if ($pesan !== '' && $kolom) {
+			$this->db->insert('tchat', array('nomor_surat' => $no, 'username' => $saya, 'level' => $this->_level(),
+				'pesan' => mb_substr($pesan, 0, 2000), 'waktu' => $this->_sekarang()));
+		}
+		// Warna bubble diambil dari profil pengirim saat ini: ganti warna ikut mengubah riwayat, terlihat semua user
+		$data = $this->db->select('c.id_chat, c.username, c.level, c.pesan, c.waktu, u.warna_chat AS warna')
+			->join('tuser u', 'u.username = c.username', 'left')
+			->where('c.nomor_surat', $no)->order_by('c.id_chat')->get('tchat c')->result();
+
+		// Ditandai dibaca hanya oleh sales / Business Development, saat kirim pesan atau jendela chat sedang aktif (baca=1).
+		// Ditulis hanya bila ada pesan lebih baru dari waktu baca terakhir, supaya polling tidak terus menulis ke tsurat.
+		if ($kolom && $data && ($pesan !== '' || $this->input->get_post('baca')) && (string) $surat->$kolom < end($data)->waktu) {
+			$surat->$kolom = $this->_sekarang();
+			$this->db->update('tsurat', array($kolom => $surat->$kolom), array('nomor_surat' => $no));
+		}
+		foreach ($data as $c) {
+			$c->saya = strcasecmp($c->username, $saya) === 0; // pesan sendiri tampil di kanan
+			// Ceklis 2 biru: pesan Business Development sudah dibuka sales, pesan sales sudah dibuka Business Development
+			$dibaca_pada = $c->level === 'business development' ? $surat->sales_last_read_at : $surat->bd_last_read_at;
+			$c->dibaca = $dibaca_pada !== NULL && $dibaca_pada >= $c->waktu;
+			$c->level = $this->_label_level($c->level);
+		}
+		header('Content-Type: application/json');
+		echo json_encode(array('saya' => $saya, 'boleh_kirim' => (bool) $kolom, 'data' => $data), JSON_INVALID_UTF8_SUBSTITUTE);
+	}
+
+	// Notifikasi pesan masuk yang belum dibaca: sales <- pesan Business Development di data miliknya,
+	// Business Development <- pesan sales di semua data. Admin hanya baca: tanpa notifikasi chat.
+	public function notif_chat(){
+		if (!isset($_SESSION['username'])) { $this->output->set_status_header(403); return; }
+		$kolom = $this->_kolom_baca();
+		$baru  = array();
+		if ($kolom) {
+			$bd    = $this->_level() === 'business development';
+			$batas = $bd ? "c.level = 'sales'"
+				: "c.level = 'business development' AND s.pic = " . $this->db->escape($_SESSION['username']); // sama dengan tabel sales (M_admin::tampil_data)
+			$baru  = $this->db->query("SELECT c.id_chat, c.nomor_surat, c.username, c.level, c.pesan, c.waktu, s.kode_website, s.nama_perusahaan_klien
+				FROM tchat c JOIN tsurat s ON s.nomor_surat = c.nomor_surat
+				WHERE $batas AND (s.$kolom IS NULL OR c.waktu > s.$kolom)
+					AND s.bulan LIKE " . $this->db->escape('%' . date('y') . '%') . " -- sama dengan tabel (M_admin::tampil_data): hanya data tahun ini, supaya notifikasi bisa dibuka
+				ORDER BY c.id_chat DESC")->result();
+		}
+		$per_baris = array();
+		foreach ($baru as $c) {
+			$per_baris[$c->nomor_surat] = (isset($per_baris[$c->nomor_surat]) ? $per_baris[$c->nomor_surat] : 0) + 1;
+			$c->level = $this->_label_level($c->level);
+		}
+		header('Content-Type: application/json');
+		echo json_encode(array('jumlah' => count($baru), 'per_baris' => (object) $per_baris, 'data' => array_slice($baru, 0, 5)), JSON_INVALID_UTF8_SUBSTITUTE);
 	}
 
 	// Daftar isian form customer eksternal (htdocs/form_customer), masuk lewat Api::request_customer
 	public function request_customer(){
-		if (!$this->_is_admin()) redirect('data-testindo');
+		if (!$this->_boleh_request()) redirect('data-testindo');
 		// Hanya request yang belum dikonfirmasi; yang sudah dikonfirmasi/dihapus langsung dihapus dari tabel
 		$data['requests'] = $this->db->where('status', 'Baru')->order_by('id_request', 'DESC')->get('trequest_customer')->result();
 		$this->load->view('admin/request_customer', $data);
 	}
 
 	public function hapus_request($id){
-		if (!$this->_is_admin()) redirect('data-testindo');
+		if (!$this->_boleh_request()) redirect('data-testindo');
 		$this->db->delete('trequest_customer', array('id_request' => (int) $id));
 		redirect('request-customer');
 	}
 
 	// Notifikasi header: jumlah request baru + 5 terbaru
 	public function notif_request(){
-		if (!$this->_is_admin()) { $this->output->set_status_header(403); return; }
+		if (!$this->_boleh_request()) { $this->output->set_status_header(403); return; }
 		$baru = array('status' => 'Baru');
 		header('Content-Type: application/json');
 		echo json_encode(array(
@@ -712,6 +818,17 @@ class Admin extends CI_Controller {
 
 	function upload_gambar(){
 		$this->load->view('admin/upload_gambar',array('error' => ''));
+	}
+
+	// Profil: simpan warna bubble chat milik user sendiri (hanya dari daftar WARNA_CHAT)
+	public function simpan_warna_chat(){
+		if (!isset($_SESSION['username'])) redirect('login');
+		$warna = strtolower((string) $this->input->post('warna_chat'));
+		if (preg_match('/^#[0-9a-f]{6}$/', $warna)) { // pilihan WARNA_CHAT atau warna bebas dari lingkaran RGB
+			$this->db->update('tuser', array('warna_chat' => $warna === '#1e5bd6' ? NULL : $warna), array('username' => $_SESSION['username']));
+			$this->session->set_flashdata('warna_ok', TRUE);
+		}
+		redirect('profil');
 	}
 
 	function count_data(){    

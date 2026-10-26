@@ -169,6 +169,15 @@ html[data-theme="dark"] .dt-bubble::after { background: var(--bg-elev); border-c
 html[data-theme="dark"] .notif-head, html[data-theme="dark"] .dt-bubble-head { background: #18243f; border-bottom-color: #2a3a57; }
 html[data-theme="dark"] .notif-all, html[data-theme="dark"] .dt-bubble-foot { background: #121c33; border-top-color: #2a3a57; }
 html[data-theme="dark"] .notif-item, html[data-theme="dark"] .m-picker-opt { color: var(--text); }
+/* Bubble chat per baris */
+html[data-theme="dark"] .chat-msg .chat-teks { background: #1c2a49; border-color: #2a3a57; }
+html[data-theme="dark"] .chat-msg.saya .chat-teks { background: var(--brand-600); border-color: var(--brand-600); }
+html[data-theme="dark"] .chat-msg.lv-bd .chat-teks { background: #1a3366; border-color: #2f4f8f; }
+html[data-theme="dark"] .chat-msg.lv-sales .chat-teks { background: #123824; border-color: #1f5c3b; }
+html[data-theme="dark"] .chat-msg.lv-sales .chat-nama { color: #4ade80; }
+html[data-theme="dark"] .chat-form textarea { background: var(--bg-elev); border-color: #2a3a57; }
+html[data-theme="dark"] .chat-badge { box-shadow: 0 0 0 2px var(--bg-elev); }
+html[data-theme="dark"] .btn-chat.ada-pesan { border-color: #33518c; }
 html[data-theme="dark"] .notif-item:hover, html[data-theme="dark"] .m-picker-opt:hover, html[data-theme="dark"] .m-picker-opt:active,
 html[data-theme="dark"] .user-menu .nav-link:hover, html[data-theme="dark"] .user-menu .nav-link:focus-visible,
 html[data-theme="dark"] .pr-item:hover, html[data-theme="dark"] .pr-item.is-active,
@@ -194,7 +203,7 @@ html[data-theme="dark"] #tabel-baru tbody td { background: var(--row-bg, #111a2e
 html[data-theme="dark"] #tabel-baru tbody tr:hover > td { background: #1a2744; }
 html[data-theme="dark"] #tabel-baru .col-surat { box-shadow: 1px 0 0 #22304a; }
 html[data-theme="dark"] #tabel-baru tr.table-success { --row-bg: #0f2620; }
-html[data-theme="dark"] #tabel-baru tr.table-primary { --row-bg: #111f3d; }
+html[data-theme="dark"] #tabel-baru tr.table-primary { --row-bg: #172c5c; }
 html[data-theme="dark"] #tabel-baru tr.table-warning { --row-bg: #272310; }
 html[data-theme="dark"] #tabel-baru tr.table-secondary { --row-bg: #141d30; }
 html[data-theme="dark"] #tabel-baru tr.close-gagal { --row-bg: #26151f; }
@@ -205,11 +214,26 @@ html[data-theme="dark"] .chip-surat.bg-primary { background: #14274d !important;
 html[data-theme="dark"] .st-none { --chip-bg: #1e293b; --chip-fg: #94a3b8; }
 html[data-theme="dark"] .rq-status.baru { background: #3a2f0b; color: #facc15; }
 html[data-theme="dark"] .rq-status.diproses { background: #0f2e22; color: #4ade80; }
-html[data-theme="dark"] .dataTables_info, html[data-theme="dark"] .dataTables_length label,
+html[data-theme="dark"] .dataTables_length label,
 html[data-theme="dark"] .dataTables_filter label { color: var(--text-muted); }
-html[data-theme="dark"] .page-link { background: var(--bg-elev); border-color: #2a3a57; color: var(--text); }
-html[data-theme="dark"] .page-item.disabled .page-link { background: var(--bg-inset); color: var(--text-faint); }
-html[data-theme="dark"] .page-item.active .page-link { background: var(--brand-600); border-color: var(--brand-600); color: #fff; }
+/* Search & per halaman: garis/fokus redup, panah & daftar pilihan terbaca di latar gelap */
+html[data-theme="dark"] .dataTables_wrapper .dataTables_length select:hover, html[data-theme="dark"] .dataTables_wrapper .dataTables_filter input:hover { border-color: #33518c; box-shadow: none; }
+html[data-theme="dark"] .dataTables_wrapper .dataTables_length select:focus, html[data-theme="dark"] .dataTables_wrapper .dataTables_filter input:focus { border-color: var(--brand-600); box-shadow: 0 0 0 3px rgba(59, 118, 240, .25); }
+html[data-theme="dark"] .dataTables_wrapper .dataTables_filter input::placeholder { color: var(--text-faint); }
+html[data-theme="dark"] .dataTables_wrapper .dataTables_length select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238ab0ff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); }
+html[data-theme="dark"] .dataTables_wrapper .dataTables_length select::picker-icon { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238ab0ff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); }
+@media (min-width: 992px) { @supports (appearance: base-select) { html[data-theme="dark"] .dataTables_wrapper .dataTables_length select { background-image: none; } } } /* desktop: panah dari ::picker-icon */
+html[data-theme="dark"] .dataTables_wrapper .dataTables_length select::picker(select) { background: var(--bg-elev); border-color: #2a3a57; box-shadow: 0 12px 32px rgba(0, 0, 0, .45); }
+html[data-theme="dark"] .dataTables_wrapper .dataTables_length select option { background: transparent; color: var(--text); }
+html[data-theme="dark"] .dataTables_wrapper .dataTables_length select option:is(:hover, :focus-visible) { background: #1c2a49; color: var(--text-strong); }
+html[data-theme="dark"] .dataTables_wrapper .dataTables_length select option:checked { background: var(--brand-soft); color: var(--brand-700); }
+/* Info & paginasi di bawah tabel: angka wajib terbaca di semua perangkat (!important mengalahkan gaya bawaan Bootstrap/DataTables) */
+html[data-theme="dark"] .dataTables_info { color: var(--text-strong) !important; }
+html[data-theme="dark"] .dataTables_wrapper .pagination .page-link { background: var(--bg-elev) !important; border-color: #33518c !important; color: var(--text-strong) !important; opacity: 1 !important; -webkit-text-fill-color: currentColor; }
+html[data-theme="dark"] .dataTables_wrapper .pagination .page-link:hover { background: #22365e !important; border-color: #5b80c9 !important; color: #fff !important; }
+html[data-theme="dark"] .dataTables_wrapper .pagination .page-link:focus { box-shadow: 0 0 0 3px rgba(138, 176, 255, .3) !important; }
+html[data-theme="dark"] .dataTables_wrapper .pagination .page-item.active .page-link { background: var(--brand-600) !important; border-color: #6d97f5 !important; box-shadow: 0 6px 16px rgba(59, 118, 240, .35) !important; color: #fff !important; }
+html[data-theme="dark"] .dataTables_wrapper .pagination .page-item.disabled .page-link { background: transparent !important; border-color: #2a3a57 !important; color: #8796ad !important; }
 
 /* Analytic: tabel ringkasan & grafik Google (dibalik warnanya supaya terbaca di latar gelap) */
 html[data-theme="dark"] .tabel-analytic tbody td { border-color: #1e2a42 !important; }

@@ -9,8 +9,9 @@ class M_admin extends CI_Model{
         
         // Melakukan LEFT JOIN berdasarkan ID bidang usaha
         $this->db->join('tbidang_usaha', 'tbidang_usaha.id_bidang_usaha = tsurat.bidang_usaha', 'left');
-    
-        if ($_SESSION['level'] == "admin") {
+
+        // Business Development bertugas mengecek semua data, sama seperti admin
+        if ($_SESSION['level'] == "admin" || $_SESSION['level'] == "business development") {
             $year = date("y");
             $this->db->where('tsurat.kode_website', "$kode_web"); // Ditambahkan prefix tabel agar tidak ambigu
             $this->db->like('tsurat.bulan', "$year");

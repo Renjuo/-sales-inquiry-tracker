@@ -316,7 +316,7 @@ include 'header.php';
                     // PERBAIKAN 2: Menggunakan Session level secara langsung agar bebas dari error variable $row
                     $session_level = isset($_SESSION['level']) ? $_SESSION['level'] : '';
 
-                    if ($session_level == "admin"){ ?>
+                    if ($session_level == "admin" || $session_level == "business development"){ ?>
                       <select class="form-control" name="pic" id="pic">
                         <option >Alfian</option>
                         <option >Alfin Rusdi</option>

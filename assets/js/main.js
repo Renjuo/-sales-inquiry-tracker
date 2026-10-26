@@ -204,7 +204,8 @@ jQuery(document).ready(function($) {
 			}
 			$drp.find('.drp-grid').html(html);
 		}
-		function set(a, b) { $from.val(a); $to.val(b); render(); $from.trigger('change'); }
+		// Event native, bukan .trigger(): halaman tabel memuat 2 jQuery (plugins.js & datatables.min.js), .trigger() tidak sampai ke handler jQuery lain
+		function set(a, b) { $from.val(a); $to.val(b); render(); $from[0].dispatchEvent(new Event('change', { bubbles: true })); }
 		function done() { $drp.removeClass('is-open'); }
 		function open() {
 			var v = $from.val() || $to.val();

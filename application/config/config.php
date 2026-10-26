@@ -118,9 +118,9 @@ if (is_file(FCPATH . '.env')) {
 if (getenv('BASE_URL')) $config['base_url'] = rtrim(getenv('BASE_URL'), '/') . '/';
 
 // URL Portal Absensi Staff, diambil dari .env (PORTAL_ABSENSI_URL). Kosong = SSO tidak dipakai (login lokal).
-$config['portal_absensi_url'] = getenv('PORTAL_ABSENSI_URL') ?: '';
+//$config['portal_absensi_url'] = getenv('PORTAL_ABSENSI_URL') ?: '';
 // Tujuan setelah Logout: halaman login ERP (bisa diganti lewat ERP_URL di .env)
-$config['erp_url'] = getenv('ERP_URL') ?: ''; /*'https://erp.testindo.co.id/login';*/
+/*$config['erp_url'] = getenv('ERP_URL') ?: ''; 'https://erp.testindo.co.id/login';*/
 
 // JWT secret bersama dengan Portal Absensi (HS256), diambil dari .env (SSO_JWT_SECRET).
 $config['sso_jwt_secret'] = getenv('SSO_JWT_SECRET') ?: '';

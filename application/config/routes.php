@@ -77,6 +77,7 @@ $route['analytic/per-tahun']        = 'admin/analytic_pertahun';
 $route['display-prospek']           = 'admin/display_dashboard';
 $route['export-data']               = 'admin/halaman_export';
 $route['ganti-foto']                = 'admin/upload_gambar';
+$route['profil']                    = 'admin/upload_gambar';
 // URL tanpa prefix admin/: /index_2/TST -> admin/index_2/TST (URL lama admin/... tetap jalan)
 $route['(?!(?:admin|api|login|sso|crud|download|upload|welcome)(?:/|$))(.+)'] = 'admin/$1';
 $route['sso/logout'] = 'sso/logout';
