@@ -54,10 +54,6 @@ $route['admin'] = 'admin';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-// ========================================================
-// SSO DARI PORTAL ABSENSI STAFF PT YOUR_COMPANY
-// ========================================================
-$route['sso'] = 'sso/index';
 // URL lama admin/data25/TST tetap jalan -> admin/arsip/TST/25
 $route['admin/data(\d{2})/(:any)'] = 'admin/arsip/$2/$1';
 // Alamat halaman tanpa nama method/kode (alamat lama, mis. index_2/TST, tetap jalan lewat aturan di bawah)
@@ -79,5 +75,4 @@ $route['export-data']               = 'admin/halaman_export';
 $route['ganti-foto']                = 'admin/upload_gambar';
 $route['profil']                    = 'admin/upload_gambar';
 // URL tanpa prefix admin/: /index_2/TST -> admin/index_2/TST (URL lama admin/... tetap jalan)
-$route['(?!(?:admin|api|login|sso|crud|download|upload|welcome)(?:/|$))(.+)'] = 'admin/$1';
-$route['sso/logout'] = 'sso/logout';
+$route['(?!(?:admin|api|login|crud|download|upload|welcome)(?:/|$))(.+)'] = 'admin/$1';

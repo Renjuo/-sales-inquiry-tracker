@@ -19,11 +19,6 @@ class Login extends CI_Controller
 			redirect(base_url('data-your_company'));
 		}
 
-		// SSO aktif: belum login -> ke halaman login Portal Absensi (masuk BeforePO lewat menu portal di sana)
-		if ($this->config->item('portal_absensi_url')) {
-			redirect($this->config->item('portal_absensi_url'));
-		}
-
 		$data = [
 			'title' => 'PT Your_company - Login'
 		];
@@ -81,9 +76,7 @@ class Login extends CI_Controller
 		$this->session->sess_destroy();
 		$this->input->set_cookie('tetap_masuk', '', '');
 
-		// Setelah logout: ke halaman login ERP ($config['erp_url'], bisa diganti lewat ERP_URL di .env)
-
-		redirect($this->config->item('erp_url') ?: 'login'); // erp_url kosong = login lokal
+		redirect('login');
 	}
 
 	public function tambah()

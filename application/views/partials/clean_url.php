@@ -1,7 +1,7 @@
 <?php
 /**
  * Clean URL: address bar hanya menampilkan alamat dasar BeforePO (tanpa nama halaman,
- * query string, maupun #token dari SSO). Halaman tetap dimuat dari alamat aslinya.
+ * query string). Halaman tetap dimuat dari alamat aslinya.
  * Dimuat di <head>: <?php $this->load->view('partials/clean_url'); ?>
  */
 ?>

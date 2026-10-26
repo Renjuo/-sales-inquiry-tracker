@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * API publik untuk form customer eksternal (htdocs/form_customer).
- * Tanpa login: controller 'api' dikecualikan di SsoAuthHook.
+ * Tanpa login.
  */
 class Api extends CI_Controller {
 

@@ -12,10 +12,3 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-// SSO Portal Absensi Staff: DINONAKTIFKAN sementara, login memakai halaman login bawaan BeforePO
-/*$hook['post_controller_constructor'][] = array(
-    'class'    => 'SsoAuthHook',
-    'function' => 'checkAuth',
-    'filename' => 'SsoAuthHook.php',
-    'filepath' => 'hooks',
-);*/
